@@ -22,16 +22,12 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this,navDrawer,R.string.open,R.string.close){
             public void onDrawerClosed(View view){
                 super.onDrawerClosed(view);
-                //getActionBar().setTitle("done");
             }
             public void onDrawerOpened(View view){
                 super.onDrawerOpened(view);
-                //getActionBar().setTitle("open");
             }
         };
         navDrawer.setDrawerListener(drawerToggle);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
