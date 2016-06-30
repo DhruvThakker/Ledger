@@ -4,46 +4,131 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    tools:context="cyberknight.android.project.SummaryFragment">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Balance Info"
-        android:textSize="@dimen/medium_text"
-        android:textStyle="bold"/>
+    tools:context="cyberknight.android.project.BalanceFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4">
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Balance Info"
+            android:textSize="@dimen/medium_text"
+            android:textStyle="bold"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/llPieChart"
-            android:padding="5dp">
+            android:orientation="horizontal"
+            android:weightSum="4">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
                 android:layout_height="wrap_content"
-                android:text="Piechart"
-                android:textSize="@dimen/small_text"
-                android:textStyle="bold"/>
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1.5"
+                        android:layout_height="wrap_content"
+                        android:text="Budget"
+                        android:textSize="@dimen/small_text"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textSize="@dimen/small_text"
+                        android:gravity="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1.5"
+                        android:layout_height="wrap_content"
+                        android:text="Expense"
+                        android:textSize="@dimen/small_text"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textSize="@dimen/small_text"
+                        android:gravity="end"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1.5"
+                        android:layout_height="wrap_content"
+                        android:text="Balance"
+                        android:textSize="@dimen/small_text"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textSize="@dimen/small_text"
+                        android:gravity="end"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account"
+            android:textSize="@dimen/medium_text"
+            android:textStyle="bold"/>
+
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -59,14 +144,14 @@
                     android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:text="Budget"
-                    android:textSize="@dimen/medium_text"/>
+                    android:textSize="@dimen/small_text"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
-                    android:textSize="@dimen/medium_text"
+                    android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
             </LinearLayout>
@@ -83,14 +168,14 @@
                     android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:text="Expense"
-                    android:textSize="@dimen/medium_text"/>
+                    android:textSize="@dimen/small_text"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
-                    android:textSize="@dimen/medium_text"
+                    android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
             </LinearLayout>
@@ -107,14 +192,14 @@
                     android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:text="Balance"
-                    android:textSize="@dimen/medium_text"/>
+                    android:textSize="@dimen/small_text"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
-                    android:textSize="@dimen/medium_text"
+                    android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
             </LinearLayout>
@@ -122,5 +207,6 @@
         </LinearLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>

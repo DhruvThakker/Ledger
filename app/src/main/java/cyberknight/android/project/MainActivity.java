@@ -1,25 +1,26 @@
 package cyberknight.android.project;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navButtons[4] = (LinearLayout) findViewById(R.id.navSettings);
         navButtons[5] = (LinearLayout) findViewById(R.id.navAboutUs);
 
+        BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
+        bottomBar.setItemsFromMenu(R.menu.navigation_bottom_button, new OnMenuTabSelectedListener() {
+            @Override
+            public void onMenuItemSelected(int itemId) {
+                switch (itemId) {
+                    case R.id.home_item:
+                        Log.d("daa","home");
+                        Fragment fragment = new MainActivityFragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                        break;
+                    case R.id.summary_item:
+                        Log.d("daa","summary");
+                        Fragment fragment1 = new BalanceFragment();
+                        FragmentManager fragmentManager1 = getSupportFragmentManager();
+                        fragmentManager1.beginTransaction().replace(R.id.content_frame, fragment1).commit();
+                        break;
+                    case R.id.analysis_item:
+
+                        break;
+                }
+            }
+        });
+
+        // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
+        bottomBar.setActiveTabColor("#C2185B");
+
+        Fragment fragment = new MainActivityFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
         for(int i=0; i<6; i++) navButtons[i].setOnClickListener(this);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close){
@@ -53,11 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.summary);
-
         try {
             getSupportActionBar().setElevation(3);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,11 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(mDrawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -84,12 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.navHome:
-                Fragment fragment = new MainActivityFragments();
+                Fragment fragment = new MainActivityFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-                Fragment fragment1 = new BalanceFragment();
-                fragmentManager.beginTransaction().replace(R.id.summary, fragment1).commit();
-                mViewPager.setAdapter(mSectionsPagerAdapter);
                 setTitle("Home");
                 break;
             case R.id.navAccoout:
@@ -110,29 +131,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
         }
         mDrawerLayout.closeDrawers();
-    }
-
-    static class SectionsPagerAdapter extends FragmentPagerAdapter{
-
-        public SectionsPagerAdapter(FragmentManager fm){
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment;
-            if(position==1){
-                fragment= new BalanceFragment();
-            }
-            else{
-                fragment = new SummaryFragment();
-            }
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
     }
 }

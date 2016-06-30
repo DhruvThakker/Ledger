@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="cyberknight.android.project.MainActivityFragments">
+    tools:context=".MainActivityFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:id="@+id/fabNewRecord"
         app:fabSize="normal"
         android:elevation="5dp"
         app:rippleColor="@color/yellow_200"
