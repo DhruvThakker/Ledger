@@ -21,6 +21,7 @@ public class MainActivityFragments extends Fragment {
 
     public MainActivityFragments(){}
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ListView records = (ListView) view.findViewById(R.id.recordList);

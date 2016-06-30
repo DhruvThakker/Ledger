@@ -2,6 +2,8 @@ package cyberknight.android.project;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.summary);
+
         try {
+            getSupportActionBar().setElevation(3);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }catch(NullPointerException npe){
             Log.d("MainActivity","support action bar failed");
@@ -77,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Fragment fragment = new MainActivityFragments();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                Fragment fragment1 = new BalanceFragment();
+                fragmentManager.beginTransaction().replace(R.id.summary, fragment1).commit();
+                mViewPager.setAdapter(mSectionsPagerAdapter);
                 setTitle("Home");
                 break;
             case R.id.navAccoout:
@@ -97,5 +110,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
         }
         mDrawerLayout.closeDrawers();
+    }
+
+    static class SectionsPagerAdapter extends FragmentPagerAdapter{
+
+        public SectionsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment;
+            if(position==1){
+                fragment= new BalanceFragment();
+            }
+            else{
+                fragment = new SummaryFragment();
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 }

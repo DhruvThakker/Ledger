@@ -1,4 +1,4 @@
-package com.umang.sampleproject;
+package cyberknight.android.project;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,13 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+
 /**
  * Created by umang on 30/6/16.
  */
-public class DBHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
 
 
-    private static final String TAG = DBHelper.class.getSimpleName();
+    private static final String TAG = DbHelper.class.getSimpleName();
 
     private static final int DATABASE_VERSION = 1;
     // Database Name
@@ -39,14 +40,14 @@ public class DBHelper extends SQLiteOpenHelper {
             + ")";
 
 
-    public DBHelper(Context context) {
+    public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        autoId = 0;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_DAILY_INFO);
+        autoId = 0;
     }
 
     @Override

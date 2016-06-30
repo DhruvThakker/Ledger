@@ -5,13 +5,14 @@ package cyberknight.android.project;
  */
 public class AccountDetails {
 
+    private int id;
     private String category;
     private String date;
     private String accountType;
-    private String amount;
+    private int amount;
     private String note;
 
-    public AccountDetails(String category, String date, String accountType, String amount, String note) {
+    public AccountDetails(String category, String date, String accountType, int amount, String note) {
         this.category = category;
         this.date = date;
         this.accountType = accountType;
@@ -43,11 +44,11 @@ public class AccountDetails {
         this.accountType = accountType;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
