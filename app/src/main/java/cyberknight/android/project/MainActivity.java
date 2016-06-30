@@ -3,6 +3,7 @@ package cyberknight.android.project;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mDrawerLayout.closeDrawers();
                 selectItemFromDrawer(position);
             }
         });
@@ -93,7 +95,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItemFromDrawer(int position){
-        Fragment fragment = new MainActivityFragments();
+        if(position==0) {
+            Fragment fragment = new MainActivityFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        }
         setTitle(mListItems.get(position).title);
     }
 
