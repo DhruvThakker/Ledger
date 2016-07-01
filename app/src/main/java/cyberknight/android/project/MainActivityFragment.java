@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
  */
 public class MainActivityFragment extends Fragment {
 
+    private static DialogFragment newFragment;
+
     public MainActivityFragment(){}
 
     @Override
@@ -34,14 +37,27 @@ public class MainActivityFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(),AddRecord.class);
-                startActivity(i);
+                showDialog();
             }
         });
 
         RecordAdapter adapter = new RecordAdapter(getContext(),list);
         records.setAdapter(adapter);
         return view;
+    }
+
+    void showDialog() {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        // Create and show the dialog.
+        newFragment = NewRecord.newInstance(0);
+        newFragment.setCancelable(false);
+        newFragment.show(getFragmentManager(),"tag");
+    }
+
+    static void setCancelable(boolean var){
+        newFragment.setCancelable(var);
     }
 
     class RecordAdapter extends BaseAdapter {

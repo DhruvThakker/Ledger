@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -114,13 +113,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setTitle("Home");
                 break;
             case R.id.navAccoout:
-                setTitle("Accounts");
+                Intent i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                i.putExtra("Fragment","Accounts");
+                startActivity(i);
                 break;
             case R.id.navAnalysis:
-                setTitle("Analysis");
+                i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                i.putExtra("Fragment","Analysis");
+                startActivity(i);
                 break;
             case R.id.navBudget:
-                setTitle("Budget");
+                i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                i.putExtra("Fragment","Budget");
+                startActivity(i);
                 break;
             case R.id.navSettings:
                 setTitle("Settings");
