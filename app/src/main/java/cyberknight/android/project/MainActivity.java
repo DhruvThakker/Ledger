@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navButtons[4] = (LinearLayout) findViewById(R.id.navSettings);
         navButtons[5] = (LinearLayout) findViewById(R.id.navAboutUs);
 
+        DbHelper database = new DbHelper(getApplicationContext());
+
         BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.setItemsFromMenu(R.menu.navigation_bottom_button, new OnMenuTabSelectedListener() {
             @Override

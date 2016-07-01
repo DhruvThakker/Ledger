@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,14 +44,19 @@ public class NewRecord extends DialogFragment {
         Spinner transaction = (Spinner)v.findViewById(R.id.spinnerTransaction);
         Spinner category = (Spinner)v.findViewById(R.id.spinnerCategory);
         Spinner paymentType = (Spinner)v.findViewById(R.id.spinnerPaymentType);
+        EditText amount = (EditText) v.findViewById(R.id.textAmount);
+        EditText note = (EditText) v.findViewById(R.id.textNote);
 
-        ArrayList<String> temp = new ArrayList<>();
-        temp.add("abcsdfafv");
-        temp.add("123sdv");
-        temp.add("lkgjaweer");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item ,temp);
+        JsonReader jsonReader = new JsonReader(v.getContext());
+
+        ArrayList<String> trans = new ArrayList<>();
+        trans.add("Income");
+        trans.add("Expense");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item ,trans);
         transaction.setAdapter(adapter);
+        adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item , jsonReader.getCategories());
         category.setAdapter(adapter);
+        adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
         paymentType.setAdapter(adapter);
 
         Button button = (Button)v.findViewById(R.id.btnSave);

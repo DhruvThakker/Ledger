@@ -1,0 +1,25 @@
+{
+  "Category": [
+    "Food",
+    "Enterainment",
+    "Travel",
+    "Education",
+    "Clothing/Beauty",
+    "Medical",
+    "Social",
+    "Other"
+  ],
+
+  "AccountNames":[
+    "Cash",
+    "Card",
+    "Bank"
+  ],
+
+  "Accounts":
+  {
+      "Cash": 2000,
+      "Card": 5000,
+      "Bank": 10000
+  }
+}
