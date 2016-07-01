@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/activity_horizontal_margin"
     tools:context=".HomeScreen.SummaryFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,31 +120,16 @@
             android:layout_height="wrap_content"
             android:text="Date:"
             android:padding="5dp"
-            android:textSize="@dimen/medium_text"/>
-        <LinearLayout
+            android:textSize="@dimen/medium_text"
+            android:layout_gravity="center_vertical"/>
+        <DatePicker
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="5">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <NumberPicker
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"/>
-            <NumberPicker
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <NumberPicker
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_height="125dp"
+            android:id="@+id/datePicker"
+            android:layout_gravity="center_horizontal"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"/>
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
