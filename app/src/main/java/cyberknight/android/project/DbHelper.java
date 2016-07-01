@@ -2,9 +2,12 @@ package cyberknight.android.project;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 
 /**
@@ -92,6 +95,98 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.update(TABLE_NAME, values, KEY_ID + " = " + id,null);
 
+    }
+
+    public ArrayList<AccountDetails> getAllAccountDetails() {
+
+        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tq ";
+
+        Log.e(TAG, "Get All Details " + selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Log.d(TAG, "Account Cursor "+c.toString());
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+
+                AccountDetails account = new AccountDetails();
+                account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
+                account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
+                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
+                accountModels.add(account);
+
+            } while (c.moveToNext());
+        }
+        return accountModels;
+    }
+
+    public ArrayList<AccountDetails> getAllAccountDetailsByDate(String date) {
+
+        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_DATE + " = '" + date +"' ORDER BY tm." +KEY_ID + " DESC";
+
+        Log.d(TAG, "Get All Date Query "+selectQuery);
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Log.d(TAG, "Date Cursor "+c.toString());
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+
+                AccountDetails account = new AccountDetails();
+                account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
+                account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
+                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
+                accountModels.add(account);
+
+            } while (c.moveToNext());
+        }
+        return accountModels;
+    }
+
+    public ArrayList<AccountDetails> getAllAccountDetailsByCategory(String category) {
+
+        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_CATEGORY + " = '" + category +"' ORDER BY tm." +KEY_DATE + " DESC";
+
+        Log.d(TAG, "Get All Date Query "+selectQuery);
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Log.d(TAG, "Date Cursor "+c.toString());
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+
+                AccountDetails account = new AccountDetails();
+                account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
+                account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
+                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
+                accountModels.add(account);
+
+            } while (c.moveToNext());
+        }
+        return accountModels;
     }
 
     public boolean deleteRecord(int id)
