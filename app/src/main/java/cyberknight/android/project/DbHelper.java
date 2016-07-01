@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -36,9 +38,9 @@ public class DbHelper extends SQLiteOpenHelper {
             + "("
             + KEY_ID + " INTEGER (20) PRIMARY KEY, "
             + KEY_CATEGORY + " VARCHAR (20) , "
-            + KEY_DATE + " VARCHAR (15) "
-            + KEY_ACCOUNT_TYPE + " VARCHAR (10) "
-            + KEY_AMOUNT + " INTEGER (10) "
+            + KEY_DATE + " DATE , "
+            + KEY_ACCOUNT_TYPE + " VARCHAR (10) , "
+            + KEY_AMOUNT + " REAL , "
             + KEY_NOTE + " VARCHAR (10) "
             + ")";
 
@@ -60,16 +62,18 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRecord(int amount,String date,String category,String accountType,String note){
+    public void addRecord(double amount, Date date,String category,String accountType,String note){
 
         Log.d(TAG,"Adding Amount...");
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String rdate = sdf.format(date);
         ContentValues values = new ContentValues();
         values.put(KEY_ID,autoId++);
         values.put(KEY_AMOUNT,amount);
-        values.put(KEY_DATE,date);
+        values.put(KEY_DATE,rdate);
         values.put(KEY_CATEGORY,category);
         values.put(KEY_ACCOUNT_TYPE,accountType);
         values.put(KEY_NOTE,note);
@@ -80,15 +84,17 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    public void changeRecord(int id,int amount,String date,String category,String accountType,String note){
+    public void changeRecord(int id,int amount,Date date,String category,String accountType,String note){
 
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG,"Updated message status");
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String rdate = sdf.format(date);
         ContentValues values = new ContentValues();
         values.put(KEY_ID,id);
         values.put(KEY_AMOUNT,amount);
-        values.put(KEY_DATE,date);
+        values.put(KEY_DATE,rdate);
         values.put(KEY_CATEGORY,category);
         values.put(KEY_ACCOUNT_TYPE,accountType);
         values.put(KEY_NOTE,note);
@@ -115,19 +121,20 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
-                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setDate(new Date(c.getLong(c.getColumnIndex(KEY_DATE))));
                 account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
                 accountModels.add(account);
 
             } while (c.moveToNext());
         }
+        c.close();
         return accountModels;
     }
 
-    public ArrayList<AccountDetails> getAllAccountDetailsByDate(String date) {
+    public ArrayList<AccountDetails> getAllAccountDetailsByDate(Date date) {
 
         ArrayList<AccountDetails> accountModels = new ArrayList<>();
 
@@ -146,10 +153,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
-                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setDate(new Date(c.getLong(c.getColumnIndex(KEY_DATE))));
                 account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
                 accountModels.add(account);
 
@@ -177,10 +184,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+                account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
-                account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                account.setDate(new Date(c.getLong(c.getColumnIndex(KEY_DATE))));
                 account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
                 accountModels.add(account);
 

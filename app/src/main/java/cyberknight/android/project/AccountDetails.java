@@ -1,5 +1,7 @@
 package cyberknight.android.project;
 
+import java.sql.Date;
+
 /**
  * Created by umang on 30/6/16.
  */
@@ -7,17 +9,27 @@ public class AccountDetails {
 
     private int id;
     private String category;
-    private String date;
+    private Date date;
     private String accountType;
-    private int amount;
+    private double amount;
     private String note;
 
-    public AccountDetails(String category, String date, String accountType, int amount, String note) {
+    public AccountDetails() {}
+
+    public AccountDetails(String category, Date date, String accountType, double amount, String note) {
         this.category = category;
         this.date = date;
         this.accountType = accountType;
         this.amount = amount;
         this.note = note;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCategory() {
@@ -28,11 +40,11 @@ public class AccountDetails {
         this.category = category;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -44,11 +56,11 @@ public class AccountDetails {
         this.accountType = accountType;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

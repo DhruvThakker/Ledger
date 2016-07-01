@@ -1,5 +1,6 @@
 package cyberknight.android.project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.roughike.bottombar.OnMenuTabSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    public static Context applicationContext;
     LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navButtons[4] = (LinearLayout) findViewById(R.id.navSettings);
         navButtons[5] = (LinearLayout) findViewById(R.id.navAboutUs);
 
+        applicationContext = getApplicationContext();
         DbHelper database = new DbHelper(getApplicationContext());
 
         BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);

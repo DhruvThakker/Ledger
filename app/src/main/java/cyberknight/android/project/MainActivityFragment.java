@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -23,16 +25,19 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
 
     private static DialogFragment newFragment;
+    private DbHelper database;
+    private ArrayList<AccountDetails> allRecords;
+    private ListView records;
 
     public MainActivityFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ListView records = (ListView) view.findViewById(R.id.recordList);
-        ArrayList<AccountDetails> list = new ArrayList<>();
-        DbHelper database = new DbHelper(getContext());
+        records = (ListView) view.findViewById(R.id.recordList);
+        database = new DbHelper(MainActivity.applicationContext);
 
+        allRecords = database.getAllAccountDetailsByDate(new Date(2016,07,01));;
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabNewRecord);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +46,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        RecordAdapter adapter = new RecordAdapter(getContext(),list);
-        records.setAdapter(adapter);
+        updateRecords();
         return view;
     }
 
@@ -58,6 +62,11 @@ public class MainActivityFragment extends Fragment {
 
     static void setCancelable(boolean var){
         newFragment.setCancelable(var);
+    }
+
+    public void updateRecords(){
+        RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
+        records.setAdapter(adapter);
     }
 
     class RecordAdapter extends BaseAdapter {
@@ -102,7 +111,7 @@ public class MainActivityFragment extends Fragment {
             ImageView iconView = (ImageView) view.findViewById(R.id.recIcon);
             text.setText(fRecordItems.get(position).getCategory());
             text2.setText(fRecordItems.get(position).getNote());
-            text3.setText(fRecordItems.get(position).getAmount());
+            text3.setText(String.valueOf(fRecordItems.get(position).getAmount()));
             text4.setText(fRecordItems.get(position).getAccountType());
             iconView.setImageResource(getIconFor(fRecordItems.get(position).getCategory()));
 

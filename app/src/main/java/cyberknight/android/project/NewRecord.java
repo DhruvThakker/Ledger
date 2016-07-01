@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +19,8 @@ import java.util.ArrayList;
  * CyberKnight apps
  */
 public class NewRecord extends DialogFragment {
+
+    DbHelper database;
 
     static NewRecord newInstance(int num) {
         NewRecord f = new NewRecord();
@@ -37,17 +40,18 @@ public class NewRecord extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_new_record,container,false);
-        TextView date = (TextView) v.findViewById(R.id.date);
+        final TextView date = (TextView) v.findViewById(R.id.date);
         date.setText("22-12-1997");
         getDialog().setTitle("Add new record");
 
         Spinner transaction = (Spinner)v.findViewById(R.id.spinnerTransaction);
-        Spinner category = (Spinner)v.findViewById(R.id.spinnerCategory);
-        Spinner paymentType = (Spinner)v.findViewById(R.id.spinnerPaymentType);
-        EditText amount = (EditText) v.findViewById(R.id.textAmount);
-        EditText note = (EditText) v.findViewById(R.id.textNote);
+        final Spinner category = (Spinner)v.findViewById(R.id.spinnerCategory);
+        final Spinner paymentType = (Spinner)v.findViewById(R.id.spinnerPaymentType);
+        final EditText amount = (EditText) v.findViewById(R.id.textAmount);
+        final EditText note = (EditText) v.findViewById(R.id.textNote);
 
         JsonReader jsonReader = new JsonReader(v.getContext());
+        database = new DbHelper(MainActivity.applicationContext);
 
         ArrayList<String> trans = new ArrayList<>();
         trans.add("Income");
@@ -63,6 +67,7 @@ public class NewRecord extends DialogFragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MainActivityFragment.setCancelable(true);
+                database.addRecord(Double.parseDouble(amount.getText().toString()), new Date(2016,07,01),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 getDialog().dismiss();
             }
         });
