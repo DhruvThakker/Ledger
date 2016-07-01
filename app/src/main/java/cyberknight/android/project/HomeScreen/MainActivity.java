@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.HomeScreen;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,10 @@ import android.widget.LinearLayout;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabSelectedListener;
+
+import cyberknight.android.project.DatabaseAndReaders.DbHelper;
+import cyberknight.android.project.AccountManagement.AccountManagementActivity;
+import cyberknight.android.project.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -49,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (itemId) {
                     case R.id.home_item:
                         Log.d("daa","home");
-                        Fragment fragment = new MainActivityFragment();
+                        Fragment fragment = new HomeFragment();
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                         break;
                     case R.id.summary_item:
                         Log.d("daa","summary");
-                        Fragment fragment1 = new BalanceFragment();
+                        Fragment fragment1 = new SummaryFragment();
                         FragmentManager fragmentManager1 = getSupportFragmentManager();
                         fragmentManager1.beginTransaction().replace(R.id.content_frame, fragment1).commit();
                         break;
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
         bottomBar.setActiveTabColor("#C2185B");
 
-        Fragment fragment = new MainActivityFragment();
+        Fragment fragment = new HomeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
@@ -112,23 +116,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.navHome:
-                Fragment fragment = new MainActivityFragment();
+                Fragment fragment = new HomeFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                 setTitle("Home");
                 break;
             case R.id.navAccoout:
-                Intent i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                Intent i = new Intent(MainActivity.this,AccountManagementActivity.class);
                 i.putExtra("Fragment","Accounts");
                 startActivity(i);
                 break;
             case R.id.navAnalysis:
-                i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                i = new Intent(MainActivity.this,AccountManagementActivity.class);
                 i.putExtra("Fragment","Analysis");
                 startActivity(i);
                 break;
             case R.id.navBudget:
-                i = new Intent(MainActivity.this,NavigationItemActivity.class);
+                i = new Intent(MainActivity.this,AccountManagementActivity.class);
                 i.putExtra("Fragment","Budget");
                 startActivity(i);
                 break;

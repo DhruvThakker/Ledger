@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.HomeScreen;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import java.sql.Date;
 import java.util.ArrayList;
+
+import cyberknight.android.project.DatabaseAndReaders.DbHelper;
+import cyberknight.android.project.DatabaseAndReaders.JsonReader;
+import cyberknight.android.project.R;
 
 /**
  * Created by Parth on 30-06-2016.
@@ -34,7 +38,7 @@ public class NewRecord extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);;
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -56,9 +60,9 @@ public class NewRecord extends DialogFragment {
         ArrayList<String> trans = new ArrayList<>();
         trans.add("Income");
         trans.add("Expense");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item ,trans);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item ,trans);
         transaction.setAdapter(adapter);
-        adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item , jsonReader.getCategories());
+        adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getCategories());
         category.setAdapter(adapter);
         adapter = new ArrayAdapter<String>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
         paymentType.setAdapter(adapter);
@@ -66,8 +70,10 @@ public class NewRecord extends DialogFragment {
         Button button = (Button)v.findViewById(R.id.btnSave);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MainActivityFragment.setCancelable(true);
+                getDialog().setCancelable(true);
                 database.addRecord(Double.parseDouble(amount.getText().toString()), new Date(2016,07,01),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
+                mUpdater.updateScreenRecords(true);
                 getDialog().dismiss();
             }
         });

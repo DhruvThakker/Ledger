@@ -1,35 +1,38 @@
-package cyberknight.android.project;
+package cyberknight.android.project.HomeScreen;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.sql.Date;
 import java.util.ArrayList;
 
+import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
+import cyberknight.android.project.DatabaseAndReaders.DbHelper;
+import cyberknight.android.project.R;
+
 /**
  * Created by Parth on 29-06-2016.
  * CyberKnight apps
  */
-public class MainActivityFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecordScreenUpdater {
 
-    private static DialogFragment newFragment;
+    private DialogFragment newRecord;
     private DbHelper database;
     private ArrayList<AccountDetails> allRecords;
     private ListView records;
 
-    public MainActivityFragment(){}
+    public HomeFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -37,7 +40,10 @@ public class MainActivityFragment extends Fragment {
         records = (ListView) view.findViewById(R.id.recordList);
         database = new DbHelper(MainActivity.applicationContext);
 
-        allRecords = database.getAllAccountDetailsByDate(new Date(2016,07,01));;
+        allRecords = database.getAllAccountDetailsByDate(new Date(2016,07,01));
+        allRecords.add(allRecords.size(),new AccountDetails());
+        RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
+        records.setAdapter(adapter);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabNewRecord);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,8 +51,6 @@ public class MainActivityFragment extends Fragment {
                 showDialog();
             }
         });
-
-        updateRecords();
         return view;
     }
 
@@ -55,18 +59,24 @@ public class MainActivityFragment extends Fragment {
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
         // Create and show the dialog.
-        newFragment = NewRecord.newInstance(0);
-        newFragment.setCancelable(false);
-        newFragment.show(getFragmentManager(),"tag");
+        newRecord = NewRecord.newInstance(0);
+        newRecord.setCancelable(false);
+        newRecord.setTargetFragment(this,0);
+        newRecord.show(getFragmentManager(),"tag");
     }
 
-    static void setCancelable(boolean var){
-        newFragment.setCancelable(var);
-    }
+    @Override
+    public void updateScreenRecords(boolean added) {
+        if(added){
+            allRecords = database.getAllAccountDetailsByDate(new Date(2016,07,01));
+            Log.d("Update Records","records"+allRecords);
+            allRecords.add(allRecords.size(),new AccountDetails());
+            RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
+            records.setAdapter(adapter);
+        }
+        else{
 
-    public void updateRecords(){
-        RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
-        records.setAdapter(adapter);
+        }
     }
 
     class RecordAdapter extends BaseAdapter {
@@ -111,7 +121,7 @@ public class MainActivityFragment extends Fragment {
             ImageView iconView = (ImageView) view.findViewById(R.id.recIcon);
             text.setText(fRecordItems.get(position).getCategory());
             text2.setText(fRecordItems.get(position).getNote());
-            text3.setText(String.valueOf(fRecordItems.get(position).getAmount()));
+            text3.setText(fRecordItems.get(position).getCategory().equals("")?"":String.valueOf(fRecordItems.get(position).getAmount()));
             text4.setText(fRecordItems.get(position).getAccountType());
             iconView.setImageResource(getIconFor(fRecordItems.get(position).getCategory()));
 

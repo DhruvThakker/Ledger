@@ -1,10 +1,12 @@
-package cyberknight.android.project;
+package cyberknight.android.project.AccountManagement;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import cyberknight.android.project.R;
 
 /**
  * Created by umang on 1/7/16.

@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.DatabaseAndReaders;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -32,11 +32,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_ACCOUNT_TYPE = "account_type";
     public static final String KEY_NOTE = "note";
 
-    public static long autoId;
-
     public static final String CREATE_TABLE_DAILY_INFO = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
             + "("
-            + KEY_ID + " INTEGER (20) PRIMARY KEY, "
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
             + KEY_CATEGORY + " VARCHAR (20) , "
             + KEY_DATE + " DATE , "
             + KEY_ACCOUNT_TYPE + " VARCHAR (10) , "
@@ -52,7 +50,6 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_DAILY_INFO);
-        autoId = 0;
     }
 
     @Override
@@ -71,7 +68,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String rdate = sdf.format(date);
         ContentValues values = new ContentValues();
-        values.put(KEY_ID,autoId++);
         values.put(KEY_AMOUNT,amount);
         values.put(KEY_DATE,rdate);
         values.put(KEY_CATEGORY,category);
@@ -92,7 +88,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String rdate = sdf.format(date);
         ContentValues values = new ContentValues();
-        values.put(KEY_ID,id);
         values.put(KEY_AMOUNT,amount);
         values.put(KEY_DATE,rdate);
         values.put(KEY_CATEGORY,category);

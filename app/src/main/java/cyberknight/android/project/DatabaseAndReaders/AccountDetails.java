@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.DatabaseAndReaders;
 
 import java.sql.Date;
 
@@ -14,7 +14,11 @@ public class AccountDetails {
     private double amount;
     private String note;
 
-    public AccountDetails() {}
+    public AccountDetails() {
+        this.category = "";
+        this.accountType = "";
+        this.note = "";
+    }
 
     public AccountDetails(String category, Date date, String accountType, double amount, String note) {
         this.category = category;

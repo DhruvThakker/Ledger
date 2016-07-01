@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.AccountManagement;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -7,13 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class NavigationItemActivity extends AppCompatActivity {
+import cyberknight.android.project.R;
+
+public class AccountManagementActivity extends AppCompatActivity {
 
     String fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_item);
+        setContentView(R.layout.activity_account_management);
 
         Intent i = getIntent();
         fragment = i.getStringExtra("Fragment");

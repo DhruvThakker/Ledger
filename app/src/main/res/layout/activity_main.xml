@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navDrawer"
-    tools:context="cyberknight.android.project.MainActivity">
+    tools:context=".HomeScreen.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"

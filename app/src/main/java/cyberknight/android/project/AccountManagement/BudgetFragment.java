@@ -1,4 +1,4 @@
-package cyberknight.android.project;
+package cyberknight.android.project.AccountManagement;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import cyberknight.android.project.R;
 
 /**
  * Created by umang on 1/7/16.

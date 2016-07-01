@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="cyberknight.android.project.BalanceFragment">
+    tools:context=".HomeScreen.SummaryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
