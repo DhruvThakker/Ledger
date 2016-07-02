@@ -80,7 +80,7 @@ public class NewRecord extends DialogFragment{
             public void onClick(View v) {
                 getDialog().setCancelable(true);
                 Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
-                database.addRecord(Double.parseDouble(amount.getText().toString()), new Date(date.getYear(), date.getMonth(), date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                database.addRecord(Double.parseDouble(amount.getText().toString()), "2016-07-02",category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords(true);
                 getDialog().dismiss();

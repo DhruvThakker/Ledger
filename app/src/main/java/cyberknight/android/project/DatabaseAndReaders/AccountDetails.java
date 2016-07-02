@@ -9,7 +9,7 @@ public class AccountDetails {
 
     private int id;
     private String category;
-    private Date date;
+    private String date;
     private String accountType;
     private double amount;
     private String note;
@@ -20,7 +20,7 @@ public class AccountDetails {
         this.note = "";
     }
 
-    public AccountDetails(String category, Date date, String accountType, double amount, String note) {
+    public AccountDetails(String category, String date, String accountType, double amount, String note) {
         this.category = category;
         this.date = date;
         this.accountType = accountType;
@@ -44,11 +44,11 @@ public class AccountDetails {
         this.category = category;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
