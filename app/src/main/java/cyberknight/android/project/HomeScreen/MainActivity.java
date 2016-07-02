@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private Fragment home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         applicationContext = getApplicationContext();
         DbHelper database = new DbHelper(getApplicationContext());
 
+        home = new HomeFragment();
         BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.setItemsFromMenu(R.menu.navigation_bottom_button, new OnMenuTabSelectedListener() {
             @Override
@@ -56,13 +58,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (itemId) {
                     case R.id.home_item:
                         Log.d("daa","home");
-                        Fragment fragment = new HomeFragment();
                         FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
                         break;
                     case R.id.summary_item:
                         Log.d("daa","summary");
-                        fragment = new SummaryFragment();
+                        Fragment fragment = new SummaryFragment();
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                         break;
@@ -78,9 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
         bottomBar.setActiveTabColor("#C2185B");
 
-        Fragment fragment = new HomeFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
 
         for(int i=0; i<6; i++) navButtons[i].setOnClickListener(this);
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_calendar) {
 
             DialogFragment calendarFragment = new CalendarFragment();
-            calendarFragment.setTargetFragment(new HomeFragment(),0);
+            calendarFragment.setTargetFragment(home,0);
             calendarFragment.show(fragmentManager,"Calendar Fragment");
 
             return true;
@@ -144,9 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.navHome:
-                Fragment fragment = new HomeFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
                 setTitle("Home");
                 break;
             case R.id.navAccoout:

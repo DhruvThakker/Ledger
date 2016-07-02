@@ -53,7 +53,8 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         Log.d("current Date","------------------"+currentDate);
         allRecords = database.getAllAccountDetailsByDate(currentDate);
         if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-        else allRecords.add(new AccountDetails("No Entries today","","",0,""));
+        else allRecords.add(new AccountDetails("No Entries today","","",-1,""));
+
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
 
@@ -89,14 +90,24 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
     }
 
     @Override
-    public void updateScreenRecords(boolean added) {
-        if(added){
+    public void updateScreenRecords() {
             allRecords = database.getAllAccountDetailsByDate(currentDate);
             Log.d("Update Records","records"+allRecords+"-------");
-            allRecords.add(allRecords.size(),new AccountDetails());
+            if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
+            else allRecords.add(new AccountDetails("No Entries today..","","",0,""));
             RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
             records.setAdapter(adapter);
-        }
+    }
+
+    @Override
+    public void setDateTo(String date) {
+        currentDate = date;
+        pageDate.setText(date);
+        updateScreenRecords();
+    }
+
+    public String getCurrentDate(){
+        return this.currentDate;
     }
 
     public String changeDate(String date, int numToAdd){
@@ -117,7 +128,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         if(v.getId()==R.id.previousDate)    currentDate = changeDate(currentDate,-1);
         else    currentDate = changeDate(currentDate,1);
         pageDate.setText(currentDate);
-        updateScreenRecords(true);
+        updateScreenRecords();
     }
 
     class RecordAdapter extends BaseAdapter {
@@ -162,7 +173,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             ImageView iconView = (ImageView) view.findViewById(R.id.recIcon);
             text.setText(fRecordItems.get(position).getCategory());
             text2.setText(fRecordItems.get(position).getNote());
-            text3.setText(fRecordItems.get(position).getCategory().equals("")?"":String.valueOf(fRecordItems.get(position).getAmount()));
+            text3.setText(fRecordItems.get(position).getCategory().equals("No Entries today")?"":String.valueOf(fRecordItems.get(position).getAmount()));
             text4.setText(fRecordItems.get(position).getAccountType());
             iconView.setImageResource(getIconFor(fRecordItems.get(position).getCategory()));
 

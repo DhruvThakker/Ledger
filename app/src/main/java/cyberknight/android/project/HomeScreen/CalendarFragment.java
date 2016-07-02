@@ -32,7 +32,9 @@ public class CalendarFragment extends DialogFragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-
+                RecordScreenUpdater recordScreenUpdater = (RecordScreenUpdater) getTargetFragment();
+                recordScreenUpdater.setDateTo(NewRecord.getSringFormatForDate(year,month+1,dayOfMonth));
+                getDialog().dismiss();
             }
         });
 

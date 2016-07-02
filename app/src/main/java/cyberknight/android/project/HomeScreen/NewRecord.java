@@ -89,11 +89,11 @@ public class NewRecord extends DialogFragment{
         save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getDialog().setCancelable(true);
-                if(amount.getText().equals("")) amount.setText("0");
+                if(amount.getText().toString().equals("")) amount.setText("0");
                 Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()));
                 database.addRecord(Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
-                mUpdater.updateScreenRecords(true);
+                mUpdater.updateScreenRecords();
                 getDialog().dismiss();
             }
         });
@@ -113,7 +113,7 @@ public class NewRecord extends DialogFragment{
         return v;
     }
 
-    public String getSringFormatForDate(int year, int month, int day){
+    public static String getSringFormatForDate(int year, int month, int day){
         String date = year + "-";
 
         if(month<10) date += "0" + month;

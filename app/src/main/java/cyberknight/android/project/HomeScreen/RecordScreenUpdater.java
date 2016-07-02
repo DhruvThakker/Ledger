@@ -5,5 +5,6 @@ package cyberknight.android.project.HomeScreen;
  * CyberKnight apps
  */
 public interface RecordScreenUpdater {
-    void updateScreenRecords(boolean added);
+    void updateScreenRecords();
+    void setDateTo(String date);
 }
