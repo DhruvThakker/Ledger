@@ -3,12 +3,9 @@ package cyberknight.android.project.HomeScreen;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private FragmentManager fm = getSupportFragmentManager();
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +62,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.summary_item:
                         Log.d("daa","summary");
-                        Fragment fragment1 = new SummaryFragment();
-                        FragmentManager fragmentManager1 = getSupportFragmentManager();
-                        fragmentManager1.beginTransaction().replace(R.id.content_frame, fragment1).commit();
+                        fragment = new SummaryFragment();
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                         break;
                     case R.id.analysis_item:
-
+                        fragment = new AnalysisFragment();
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                         break;
                 }
             }
@@ -125,8 +124,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_calendar) {
 
-            CalendarFragment cfragment = new CalendarFragment();
-            cfragment.show(fm,"Calendar Fragment");
+            DialogFragment calendarFragment = new CalendarFragment();
+            calendarFragment.setTargetFragment(new HomeFragment(),0);
+            calendarFragment.show(fragmentManager,"Calendar Fragment");
+
             return true;
         }
 

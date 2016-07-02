@@ -33,7 +33,6 @@ public class CalendarFragment extends DialogFragment {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 
-                Toast.makeText(MainActivity.applicationContext, "Selected Date:\n" + "Day = " + dayOfMonth + "\n" + "Month = " + month + "\n" + "Year = " + year, Toast.LENGTH_SHORT).show();
             }
         });
 

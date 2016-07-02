@@ -1,7 +1,5 @@
 package cyberknight.android.project.DatabaseAndReaders;
 
-import java.sql.Date;
-
 /**
  * Created by umang on 30/6/16.
  */

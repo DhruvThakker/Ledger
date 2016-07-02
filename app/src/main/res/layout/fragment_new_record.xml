@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/activity_horizontal_margin"
     tools:context=".HomeScreen.SummaryFragment"
     android:background="@color/white"
     android:scrollbars="vertical">
@@ -12,24 +11,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/red_400">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Transaction Type:"
-            android:padding="5dp"
-            android:textSize="@dimen/medium_text"/>
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:textSize="@dimen/large_text"/>
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="end"
-            android:id="@+id/spinnerTransaction"/>
+            android:id="@+id/spinnerTransaction"
+            android:popupBackground="@color/red_400"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="6"
+        android:padding="10dp"
         android:layout_marginTop="10dp">
         <ImageView
             android:layout_width="0dp"
@@ -81,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,7 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

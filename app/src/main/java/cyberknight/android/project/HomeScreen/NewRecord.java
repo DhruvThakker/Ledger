@@ -12,15 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
@@ -65,27 +63,42 @@ public class NewRecord extends DialogFragment{
         JsonReader jsonReader = new JsonReader(v.getContext());
         database = new DbHelper(MainActivity.applicationContext);
 
+        amount.setText("0");
+
         ArrayList<String> trans = new ArrayList<>();
         trans.add("Income");
         trans.add("Expense");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item ,trans);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item_head ,trans);
         transaction.setAdapter(adapter);
         adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getCategories());
         category.setAdapter(adapter);
         adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
         paymentType.setAdapter(adapter);
 
-        Button button = (Button)v.findViewById(R.id.btnSave);
-        button.setOnClickListener(new View.OnClickListener() {
+        String currDate = getArguments().getString("CurrentDate");
+        try {
+            Date tmp = new SimpleDateFormat("yyyy-MM-dd").parse(currDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(tmp);
+            date.updateDate(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Button save = (Button)v.findViewById(R.id.btnSave);
+        save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getDialog().setCancelable(true);
-                Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth());
-                database.addRecord(Double.parseDouble(amount.getText().toString()), "2016-07-02",category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                if(amount.getText().equals("")) amount.setText("0");
+                Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()));
+                database.addRecord(Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords(true);
                 getDialog().dismiss();
             }
         });
+
+
 
         getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
@@ -98,5 +111,19 @@ public class NewRecord extends DialogFragment{
         });
 
         return v;
+    }
+
+    public String getSringFormatForDate(int year, int month, int day){
+        String date = year + "-";
+
+        if(month<10) date += "0" + month;
+        else date += month;
+
+        date += "-";
+
+        if(day<10) date += "0" + day;
+        else date += day;
+
+        return date;
     }
 }

@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -153,6 +151,44 @@ public class DbHelper extends SQLiteOpenHelper {
 
             } while (c.moveToNext());
         }
+        return accountModels;
+    }
+
+    public ArrayList<AccountDetails> getAllAccountDetailsByMonth(String year,String month) {
+
+        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm ";
+
+        Log.d(TAG, "Get All Month Query "+selectQuery);
+
+        String search = year+"-"+month;
+        Log.d("SearchString", search);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Log.d(TAG, "Date Cursor "+c.toString());
+
+        int count=0;
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+
+                if(c.getString(c.getColumnIndex(KEY_DATE)).contains(search)){
+                    AccountDetails account = new AccountDetails();
+                    account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                    account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
+                    account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
+                    account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
+                    account.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                    account.setAccountType(c.getString(c.getColumnIndex(KEY_ACCOUNT_TYPE)));
+                    accountModels.add(account);
+                    count++;
+                }
+
+            } while (c.moveToNext());
+        }
+        Log.d("Count",count+"");
         return accountModels;
     }
 

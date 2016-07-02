@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
@@ -28,28 +29,35 @@ import cyberknight.android.project.R;
  * Created by Parth on 29-06-2016.
  * CyberKnight apps
  */
-public class HomeFragment extends Fragment implements RecordScreenUpdater{
+public class HomeFragment extends Fragment implements RecordScreenUpdater, View.OnClickListener{
 
-    private DialogFragment newRecord;
-    private TextView pageDate;
     private ListView records;
     private DbHelper database;
     private ArrayList<AccountDetails> allRecords;
+    private String currentDate;
+    private TextView pageDate;
 
     public HomeFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pageDate = (TextView) view.findViewById(R.id.pageDate);
+        ImageView prev = (ImageView) view.findViewById(R.id.previousDate);
+        ImageView next = (ImageView) view.findViewById(R.id.nextDate);
 
         records = (ListView) view.findViewById(R.id.recordList);
         database = new DbHelper(MainActivity.applicationContext);
 
-        allRecords = database.getAllAccountDetailsByDate("2016-07-02");
-        allRecords.add(allRecords.size(),new AccountDetails());
+        currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        Log.d("current Date","------------------"+currentDate);
+        allRecords = database.getAllAccountDetailsByDate(currentDate);
+        if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
+        else allRecords.add(new AccountDetails("No Entries today","","",0,""));
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
+
+        pageDate.setText(currentDate);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabNewRecord);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +66,9 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater{
                 showDialog();
             }
         });
+
+        prev.setOnClickListener(this);
+        next.setOnClickListener(this);
         return view;
     }
 
@@ -66,12 +77,12 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater{
         super.onResume();
     }
 
+
     void showDialog() {
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        // Create and show the dialog.
-        newRecord = NewRecord.newInstance(0);
+        DialogFragment newRecord = NewRecord.newInstance(0);
+        Bundle temp = new Bundle();
+        temp.putString("CurrentDate",currentDate);
+        newRecord.setArguments(temp);
         newRecord.setCancelable(false);
         newRecord.setTargetFragment(this,0);
         newRecord.show(getFragmentManager(),"tag");
@@ -80,15 +91,33 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater{
     @Override
     public void updateScreenRecords(boolean added) {
         if(added){
-            allRecords = database.getAllAccountDetailsByDate("2016-07-02");
+            allRecords = database.getAllAccountDetailsByDate(currentDate);
             Log.d("Update Records","records"+allRecords+"-------");
             allRecords.add(allRecords.size(),new AccountDetails());
             RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
             records.setAdapter(adapter);
         }
-        else{
+    }
 
+    public String changeDate(String date, int numToAdd){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        c.add(Calendar.DATE, numToAdd);
+        date = sdf.format(c.getTime());
+        return date;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.previousDate)    currentDate = changeDate(currentDate,-1);
+        else    currentDate = changeDate(currentDate,1);
+        pageDate.setText(currentDate);
+        updateScreenRecords(true);
     }
 
     class RecordAdapter extends BaseAdapter {
