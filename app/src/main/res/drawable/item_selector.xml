@@ -6,9 +6,9 @@
         android:state_pressed="false"
         android:drawable="@color/white"/>
     <item android:state_pressed="true"
-        android:drawable="@color/green_200" />
+        android:drawable="@color/primary_light" />
     <item android:state_activated="true"
-        android:drawable="@color/green_200" />
+        android:drawable="@color/primary_light" />
     <item android:drawable="@android:color/transparent" />
 
 </selector>

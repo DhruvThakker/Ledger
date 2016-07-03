@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeScreen.MainActivity">
+        <activity android:name=".HomeScreen.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,13 +18,15 @@
         </activity>
         <activity
             android:name=".AccountManagement.AccountManagementActivity"
-            android:parentActivityName=".HomeScreen.MainActivity">
+            android:parentActivityName=".HomeScreen.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeScreen.MainActivity" />
         </activity>
         <activity android:name=".AccountManagement.AccountAnalysisActivity"
-            android:parentActivityName=".HomeScreen.MainActivity">
+            android:parentActivityName=".HomeScreen.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeScreen.MainActivity" />

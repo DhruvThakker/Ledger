@@ -10,26 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/content_frame"
-        android:background="@color/indigo_50"
-        android:backgroundTint="@color/white"/>
+        android:background="@color/white"/>
 
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="230dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:id="@+id/drawerPane"
-        android:background="@color/teal_200"
+        android:background="@color/white"
         android:orientation="vertical"
         android:scrollbars="vertical">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_100"/>
         <LinearLayout
             style="@style/OnPressed"
             android:id="@+id/navHome"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/primary_light">
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_home"
                 android:layout_gravity="center"/>
@@ -45,14 +48,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="25dp">
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_200"/>
             <LinearLayout
                 style="@style/OnPressed"
                 android:id="@+id/navAccoout">
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_dollar"
                     android:layout_gravity="center"/>
@@ -74,7 +80,7 @@
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_analysis"
                     android:layout_gravity="center"/>
@@ -96,7 +102,7 @@
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_budget"
                     android:layout_gravity="center"/>
@@ -106,7 +112,10 @@
                     android:text="Budget"/>
 
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_200"/>
         </LinearLayout>
 
         <LinearLayout
@@ -114,16 +123,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="25dp">
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_200"/>
             <LinearLayout
                 style="@style/OnPressed"
                 android:id="@+id/navSettings">
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_setting"
+                    android:src="@drawable/ic_settings"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -143,7 +155,7 @@
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_contact"
                     android:layout_gravity="center"/>
@@ -153,7 +165,10 @@
                     android:text="AboutUs"/>
 
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_200"/>
         </LinearLayout>
 
     </LinearLayout>

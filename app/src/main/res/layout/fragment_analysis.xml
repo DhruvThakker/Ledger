@@ -14,9 +14,10 @@
         android:text="DATE"
         android:textSize="@dimen/large_text"
         android:gravity="center"
+        android:textColor="@color/white"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:background="@color/indigo_50"/>
+        android:background="@color/primary"/>
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"

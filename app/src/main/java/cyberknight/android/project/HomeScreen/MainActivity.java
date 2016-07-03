@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
-        bottomBar.setActiveTabColor("#C2185B");
+        bottomBar.setActiveTabColor(getResources().getColor(R.color.primary));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         try {
-            getSupportActionBar().setElevation(3);
+            getSupportActionBar().setElevation(2);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }catch(NullPointerException npe){
             Log.d("MainActivity","support action bar failed");
