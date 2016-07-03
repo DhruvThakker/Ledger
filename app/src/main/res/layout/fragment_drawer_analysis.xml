@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Filter"
+        android:textSize="@dimen/large_text"
+        android:textStyle="bold"
+        android:padding="3dp"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rgOptions"
+        android:layout_below="@+id/tvQuestion"
+        android:layout_marginTop="5dp">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbByDate"
+            android:text="ByDate"
+            android:textSize="@dimen/medium_text"
+            android:padding="2dp"/>
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbByMonth"
+            android:text="ByMonth"
+            android:textSize="@dimen/medium_text"
+            android:padding="2dp"/>
+
+    </RadioGroup>
+
+    <DatePicker
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:id="@+id/anlysisDatePicker"
+        android:layout_gravity="center_horizontal"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"/>
+
+</LinearLayout>

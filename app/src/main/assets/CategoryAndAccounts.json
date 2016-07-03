@@ -14,12 +14,5 @@
     "Cash",
     "Card",
     "Bank"
-  ],
-
-  "Accounts":
-  {
-      "Cash": 2000,
-      "Card": 5000,
-      "Bank": 10000
-  }
+  ]
 }

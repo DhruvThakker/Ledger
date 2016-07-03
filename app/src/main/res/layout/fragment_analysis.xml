@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pageDate"
+        android:id="@+id/analysis_pagedate"
         android:text="DATE"
         android:textSize="@dimen/large_text"
         android:gravity="center"

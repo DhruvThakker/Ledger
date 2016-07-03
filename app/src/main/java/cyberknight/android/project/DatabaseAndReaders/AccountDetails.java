@@ -22,7 +22,7 @@ public class AccountDetails {
         this.category = category;
         this.date = date;
         this.accountType = accountType;
-        this.amount = amount;
+        this.amount = (double) Math.round(amount*100d)/100d;
         this.note = note;
     }
 
@@ -59,7 +59,7 @@ public class AccountDetails {
     }
 
     public double getAmount() {
-        return amount;
+        return (double) Math.round(amount*100d)/100d;
     }
 
     public void setAmount(double amount) {

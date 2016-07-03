@@ -1,14 +1,13 @@
-package cyberknight.android.project.HomeScreen;
+package cyberknight.android.project.AccountManagement;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -19,43 +18,52 @@ import java.util.ArrayList;
 import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
+import cyberknight.android.project.HomeScreen.MainActivity;
 import cyberknight.android.project.R;
 
 /**
- * Created by Parth on 02-07-2016.
- * CyberKnight apps
+ * Created by umang on 3/7/16.
  */
-public class AnalysisFragment extends Fragment {
+public class PieChartFragment extends Fragment {
+
 
     private ArrayList<String> categories = new ArrayList<>();
     private JsonReader jsonReader = new JsonReader(MainActivity.applicationContext);
-//    private ArrayList<String> accountTypes = new ArrayList<>();
-
     private PieChart pieChart;
-    private ArrayList<AccountDetails> foodRecords=new ArrayList<>();
-    private TextView page_date;
+    private ArrayList<AccountDetails> mfoodRecords=new ArrayList<>();
+    private String current;
+    private String reportOf;
+
+    public void setReportOf(String reportOf) {
+        this.reportOf = reportOf;
+    }
+
     private ArrayList<Entry> entries = new ArrayList<>();
-
-
     DbHelper dbHelper;
-    private String date;
 
-    public AnalysisFragment() {
+    public PieChartFragment() {
+    }
+
+    public void setCurrent(String current) {
+        this.current = current;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_analysis, container, false);
+        View view = inflater.inflate(R.layout.fragment_pie_chart, container, false);
 
+        pieChart = (PieChart) view.findViewById(R.id.pieChart);
         categories = jsonReader.getCategories();
         dbHelper=new DbHelper(MainActivity.applicationContext);
-        page_date = (TextView) view.findViewById(R.id.analysis_pagedate);
-        pieChart = (PieChart) view.findViewById(R.id.chart);
 
-        page_date.setText(date);
+        if(reportOf.equals("Date")){
+            mfoodRecords = dbHelper.getAllAccountDetailsByDate(current);
+        }
+        else if(reportOf.equals("Month")){
+            mfoodRecords = dbHelper.getAllAccountDetailsByMonth(current.substring(0,4),current.substring(5,7));
+        }
 
-        foodRecords = dbHelper.getAllAccountDetailsByDate(date);
-
+        Log.d("Details",mfoodRecords.get(0).getCategory());
         for (int i=0;i<categories.size();i++){
             double temp = getAmountOfCategory(categories.get(i));
             if(temp==0){
@@ -67,46 +75,29 @@ public class AnalysisFragment extends Fragment {
             }
         }
 
-        PieDataSet dataset = new PieDataSet(entries, "Categories");
-        // creating labels
+        Log.d("No Of Category",categories.size()+"");
 
-        Legend l=pieChart.getLegend();
-        l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
-        l.setXEntrySpace(12f);
-        l.setYEntrySpace(12f);
-        l.setYOffset(0f);
+        PieDataSet dataset = new PieDataSet(entries, "Categories");
         PieData data = new PieData(categories, dataset); // initialize Piedata
         pieChart.setData(data); //set data into chart
-        //data.setValueFormatter(new PercentFormatter());
-        //data.setValueTextSize(11f);
         pieChart.setDescription("");  // set the description
 
         dataset.setColors(ColorTemplate.COLORFUL_COLORS); // set the color
-        pieChart.animateY(600);
+        pieChart.animateY(1000);
 
         pieChart.setDrawHoleEnabled(true);
-        //pieChart.setHoleRadius(4f);
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Hello World");
+
         return view;
     }
-
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
 
     public double getAmountOfCategory(String category){
         double amount = 0;
 
-        for(int i=0;i<foodRecords.size();i++){
-            if(foodRecords.get(i).getCategory().equals(category)){
-                amount+=foodRecords.get(i).getAmount();
+        for(int i=0;i<mfoodRecords.size();i++){
+            if(mfoodRecords.get(i).getCategory().equals(category)){
+                amount+=mfoodRecords.get(i).getAmount();
             }
         }
         return  amount;

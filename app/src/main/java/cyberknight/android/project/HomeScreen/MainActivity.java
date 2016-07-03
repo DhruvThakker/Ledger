@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabSelectedListener;
 
+import cyberknight.android.project.AccountManagement.AccountAnalysisActivity;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.AccountManagement.AccountManagementActivity;
 import cyberknight.android.project.R;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private Fragment home;
+    private HomeFragment home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +64,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.summary_item:
                         Log.d("daa","summary");
-                        Fragment fragment = new SummaryFragment();
+                        SummaryFragment summaryFragment = new SummaryFragment();
+                        summaryFragment.setDate(home.getCurrentDate());
                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, summaryFragment).commit();
                         break;
                     case R.id.analysis_item:
-                        fragment = new AnalysisFragment();
+                        AnalysisFragment analysisFragment = new AnalysisFragment();
+                        analysisFragment.setDate(home.getCurrentDate());
                         fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, analysisFragment).commit();
                         break;
                 }
             }
@@ -154,8 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             case R.id.navAnalysis:
-                i = new Intent(MainActivity.this,AccountManagementActivity.class);
-                i.putExtra("Fragment","Analysis");
+                i = new Intent(MainActivity.this,AccountAnalysisActivity.class);
                 startActivity(i);
                 break;
             case R.id.navBudget:

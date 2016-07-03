@@ -36,8 +36,6 @@ public class AccountManagementActivity extends AppCompatActivity {
                 fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
                 break;
-            case "Analysis":
-                break;
             default:
                 Toast.makeText(this,"Error occured",Toast.LENGTH_SHORT).show();
         }

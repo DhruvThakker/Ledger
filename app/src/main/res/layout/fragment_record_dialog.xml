@@ -3,29 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".HomeScreen.SummaryFragment"
-    android:background="@color/white"
-    android:scrollbars="vertical">
+    android:layout_height="match_parent"
+    tools:context=".HomeScreen.RecordDialogFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:weightSum="6"
         android:background="@color/red_400">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Transaction Type:"
+            android:layout_weight="5"
+            android:text="Expense"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/large_text"
             android:textColor="@color/white"
-            android:padding="10dp"
-            android:textSize="20sp"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:id="@+id/spinnerTransaction"
-            android:popupBackground="@color/red_400"/>
+            android:padding="10dp"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/ic_delete"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,36 +37,21 @@
         android:layout_marginTop="10dp">
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.7"
+            android:layout_height="100dp"
+            android:layout_weight="2"
             android:background="@color/white"
-            android:id="@+id/imgCategory"/>
-        <LinearLayout
+            android:id="@+id/recordImgCategory"/>
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="4.3"
-            android:padding="10dp">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end">
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/medium_text"
-                    android:text="Rs."/>
-                <EditText
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:gravity="end"
-                    android:hint="0"
-                    android:id="@+id/textAmount"/>
-            </LinearLayout>
-
-        </LinearLayout>
+            android:textSize="@dimen/medium_text"
+            android:layout_weight="4"
+            android:id="@+id/recordAmount"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Rs."/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,11 +64,12 @@
             android:textSize="@dimen/medium_text"
             android:text="Category:"
             android:padding="5dp"/>
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:id="@+id/spinnerCategory"
+            android:layout_height="wrap_content"
+            android:text="category"
+            android:textSize="@dimen/medium_text"
+            android:id="@+id/recordCategory"
             android:gravity="end"/>
     </LinearLayout>
     <LinearLayout
@@ -96,10 +83,12 @@
             android:text="Payment Type:"
             android:padding="5dp"
             android:textSize="@dimen/medium_text"/>
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/spinnerPaymentType"
+            android:layout_height="wrap_content"
+            android:text="category"
+            android:textSize="@dimen/medium_text"
+            android:id="@+id/recordPaymentType"
             android:gravity="end"/>
     </LinearLayout>
     <LinearLayout
@@ -113,11 +102,13 @@
             android:text="Note:"
             android:padding="5dp"
             android:textSize="@dimen/medium_text"/>
-        <EditText
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:id="@+id/textNote"/>
+            android:text="category"
+            android:textSize="@dimen/medium_text"
+            android:id="@+id/recordNote"
+            android:gravity="end"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -131,15 +122,14 @@
             android:padding="5dp"
             android:textSize="@dimen/medium_text"
             android:layout_gravity="center_vertical"/>
-        <DatePicker
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:id="@+id/datePicker"
-            android:layout_gravity="center_horizontal"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"/>
+            android:layout_height="wrap_content"
+            android:text="category"
+            android:textSize="@dimen/medium_text"
+            android:id="@+id/recordDate"
+            android:gravity="end"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -150,13 +140,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btnAddNext"
-            android:text="Add Next"/>
+            android:text="Cancel"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save"
-            android:id="@+id/btnSave"/>
+            android:text="Modify"
+            android:id="@+id/recordModify"/>
     </LinearLayout>
 </LinearLayout>

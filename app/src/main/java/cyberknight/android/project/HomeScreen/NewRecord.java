@@ -51,7 +51,6 @@ public class NewRecord extends DialogFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_new_record,container,false);
-        getDialog().setTitle("Add new record");
 
         Spinner transaction = (Spinner)v.findViewById(R.id.spinnerTransaction);
         final Spinner category = (Spinner)v.findViewById(R.id.spinnerCategory);
@@ -62,8 +61,6 @@ public class NewRecord extends DialogFragment{
 
         JsonReader jsonReader = new JsonReader(v.getContext());
         database = new DbHelper(MainActivity.applicationContext);
-
-        amount.setText("0");
 
         ArrayList<String> trans = new ArrayList<>();
         trans.add("Income");
@@ -98,7 +95,17 @@ public class NewRecord extends DialogFragment{
             }
         });
 
+        Button addNext = (Button)v.findViewById(R.id.btnAddNext);
+        addNext.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(amount.getText().toString().equals("")) amount.setText("0");
+                Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()));
+                database.addRecord(Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
+                mUpdater.updateScreenRecords();
 
+            }
+        });
 
         getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override

@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         Log.d("current Date","------------------"+currentDate);
         allRecords = database.getAllAccountDetailsByDate(currentDate);
         if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-        else allRecords.add(new AccountDetails("No Entries today","","",-1,""));
+        else allRecords.add(new AccountDetails("No Entries today..","","",-1,""));
 
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
@@ -70,14 +70,23 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
 
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
+
+        records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=allRecords.size()-1) {
+                    DialogFragment showRecord = RecordDialogFragment.newInstance(0);
+                    Bundle temp = new Bundle();
+                    temp.putInt("position", position);
+                    temp.putString("date", currentDate);
+                    showRecord.setArguments(temp);
+                    showRecord.setCancelable(false);
+                    showRecord.show(getFragmentManager(), "tag2");
+                }
+            }
+        });
         return view;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
 
     void showDialog() {
         DialogFragment newRecord = NewRecord.newInstance(0);
@@ -94,7 +103,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             allRecords = database.getAllAccountDetailsByDate(currentDate);
             Log.d("Update Records","records"+allRecords+"-------");
             if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-            else allRecords.add(new AccountDetails("No Entries today..","","",0,""));
+            else allRecords.add(new AccountDetails("No Entries today..","","",-1,""));
             RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
             records.setAdapter(adapter);
     }
@@ -173,7 +182,8 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             ImageView iconView = (ImageView) view.findViewById(R.id.recIcon);
             text.setText(fRecordItems.get(position).getCategory());
             text2.setText(fRecordItems.get(position).getNote());
-            text3.setText(fRecordItems.get(position).getCategory().equals("No Entries today")?"":String.valueOf(fRecordItems.get(position).getAmount()));
+            text3.setText((fRecordItems.get(position).getCategory().equals("No Entries today..")||fRecordItems.get(position).getCategory().equals(""))?
+                    "":String.valueOf(fRecordItems.get(position).getAmount()));
             text4.setText(fRecordItems.get(position).getAccountType());
             iconView.setImageResource(getIconFor(fRecordItems.get(position).getCategory()));
 

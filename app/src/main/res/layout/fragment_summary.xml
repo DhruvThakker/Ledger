@@ -21,8 +21,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,6 +48,7 @@
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
+                    android:id="@+id/summary_budget"
                     android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
@@ -72,6 +73,7 @@
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
+                    android:id="@+id/summary_expense_b"
                     android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
@@ -83,6 +85,118 @@
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:padding="3dp"
+                android:id="@+id/summary_balance_b"
+                android:background="@color/orange_300">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="Balance"
+                    android:textSize="@dimen/small_text"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/summary_balance_1"
+                    android:text="0.00"
+                    android:textSize="@dimen/small_text"
+                    android:gravity="end"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash Flow"
+            android:textSize="@dimen/medium_text"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_600"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="Income"
+                    android:textSize="@dimen/small_text"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/summary_income"
+                    android:text="0.00"
+                    android:textSize="@dimen/small_text"
+                    android:gravity="end"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="Expense"
+                    android:textSize="@dimen/small_text"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/summary_expense_c"
+                    android:text="0.00"
+                    android:textSize="@dimen/small_text"
+                    android:gravity="end"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:padding="3dp"
+                android:id="@+id/summary_balance_c"
                 android:background="@color/orange_300">
 
                 <TextView
@@ -97,113 +211,19 @@
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:text="0.00"
+                    android:id="@+id/summary_balance_2"
                     android:textSize="@dimen/small_text"
                     android:gravity="end"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@color/black"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account"
-            android:textSize="@dimen/medium_text"
-            android:textStyle="bold"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="wrap_content"
-                    android:text="Budget"
-                    android:textSize="@dimen/small_text"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="@dimen/small_text"
-                    android:gravity="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="wrap_content"
-                    android:text="Expense"
-                    android:textSize="@dimen/small_text"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="@dimen/small_text"
-                    android:gravity="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="wrap_content"
-                    android:text="Balance"
-                    android:textSize="@dimen/small_text"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="@dimen/small_text"
-                    android:gravity="end"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
 
 </LinearLayout>

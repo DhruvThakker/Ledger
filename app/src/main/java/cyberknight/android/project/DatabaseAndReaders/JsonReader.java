@@ -67,25 +67,4 @@ public class JsonReader {
         }
         return accounts;
     }
-
-    public long getAccountSum(String acc){
-        try {
-            JSONObject mainObj = new JSONObject(loadJSONFromAsset());
-            return mainObj.getJSONObject("Accounts").getLong(acc);
-        }catch(Exception je){
-            Toast.makeText(mContext,"Unable to fetch data",Toast.LENGTH_SHORT).show();
-        }
-        return -1;
-    }
-
-    public long getTotalAccountSum(){
-        ArrayList<String> acc = getAccountsNames();
-        long sum = 0;
-        for(int i=0; i<acc.size(); i++){
-            long num;
-            if((num=getAccountSum(acc.get(i)))!=-1)
-            sum += num;
-        }
-        return sum;
-    }
 }

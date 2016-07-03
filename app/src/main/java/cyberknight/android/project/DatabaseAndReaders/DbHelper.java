@@ -41,6 +41,16 @@ public class DbHelper extends SQLiteOpenHelper {
             + ")";
 
 
+    public static final String ACCOUNTS_TABLE = "Accounts";
+    public static final String KEY_ACCOUNT_NAME = "account";
+    public static final String KEY_ACCOUNT_AMOUNT = "amount";
+
+    public static final String CREATE_TABLE_ACCOUNTS_TABLE = "CREATE TABLE IF NOT EXISTS " + ACCOUNTS_TABLE
+            + "("
+            + KEY_ACCOUNT_NAME + " VARCHAR (20) PRIMARY KEY , "
+            + KEY_ACCOUNT_AMOUNT + " REAL "
+            + ")";
+
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -48,12 +58,14 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_DAILY_INFO);
+        db.execSQL(CREATE_TABLE_ACCOUNTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS" + ACCOUNTS_TABLE);
         onCreate(db);
     }
 
@@ -74,6 +86,37 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Log.d(TAG,"RECORD ADDED++++++++++++++++++++++++++++++++++++++++ "+TABLE_NAME);
 
+    }
+
+    public void modifyAccount(String account, double amount, boolean add){
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_ACCOUNT_NAME + " = '" + account;
+
+        SQLiteDatabase db;
+        double initialAmount=0;
+
+        if(add) {
+            db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(selectQuery, null);
+
+            if (c.moveToFirst()) {
+                do {
+                    if (c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)).equals(account)) {
+                        initialAmount = c.getDouble(c.getColumnIndex(KEY_ACCOUNT_AMOUNT));
+                        break;
+                    }
+                } while (c.moveToNext());
+            }
+        }
+
+        db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ACCOUNT_NAME, account);
+
+        if(add) values.put(KEY_ACCOUNT_AMOUNT, initialAmount+amount);
+        else values.put(KEY_ACCOUNT_AMOUNT, amount);
+
+        db.update(ACCOUNTS_TABLE, values, KEY_ACCOUNT_NAME + " = " + account, null);
     }
 
     public void changeRecord(int id,int amount, String date,String category,String accountType,String note){
