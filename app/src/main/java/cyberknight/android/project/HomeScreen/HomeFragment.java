@@ -79,9 +79,10 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
                     Bundle temp = new Bundle();
                     temp.putInt("position", position);
                     temp.putString("date", currentDate);
+                    showRecord.setTargetFragment(getThisFragment(),0);
                     showRecord.setArguments(temp);
                     showRecord.setCancelable(false);
-                    showRecord.show(getFragmentManager(), "tag2");
+                    showRecord.show(getFragmentManager(), "RecordFromHome");
                 }
             }
         });
@@ -92,6 +93,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         DialogFragment newRecord = NewRecord.newInstance(0);
         Bundle temp = new Bundle();
         temp.putString("CurrentDate",currentDate);
+        temp.putString("Mode","new");
         newRecord.setArguments(temp);
         newRecord.setCancelable(false);
         newRecord.setTargetFragment(this,0);
@@ -115,9 +117,8 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         updateScreenRecords();
     }
 
-    public String getCurrentDate(){
-        return this.currentDate;
-    }
+    public String getCurrentDate(){ return this.currentDate; }
+    public Fragment getThisFragment(){ return this; }
 
     public String changeDate(String date, int numToAdd){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

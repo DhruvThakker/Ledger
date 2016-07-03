@@ -72,7 +72,7 @@ public class AnalysisFragment extends Fragment {
 
 
         for(int i=0; i<foodRecords.size(); i++){
-            if(foodRecords.get(i).getBalenceType().equals("Income"))   income += foodRecords.get(i).getAmount();
+            if(foodRecords.get(i).getTransaction().equals("Income"))   income += foodRecords.get(i).getAmount();
         }
 
         PieDataSet dataset = new PieDataSet(entries, "Categories");
@@ -113,7 +113,7 @@ public class AnalysisFragment extends Fragment {
         double amount = 0;
 
         for(int i=0;i<foodRecords.size();i++){
-            if(foodRecords.get(i).getCategory().equals(category) && foodRecords.get(i).getBalenceType().equals("Expense")){
+            if(foodRecords.get(i).getCategory().equals(category) && foodRecords.get(i).getTransaction().equals("Expense")){
                 amount+=foodRecords.get(i).getAmount();
             }
         }

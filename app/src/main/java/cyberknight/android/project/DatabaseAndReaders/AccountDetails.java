@@ -6,7 +6,7 @@ package cyberknight.android.project.DatabaseAndReaders;
 public class AccountDetails {
 
     private int id;
-    private String balenceType;
+    private String transaction;
     private String category;
     private String date;
     private String accountType;
@@ -19,8 +19,8 @@ public class AccountDetails {
         this.note = "";
     }
 
-    public AccountDetails(String balenceType, String category, String date, String accountType, double amount, String note) {
-        this.balenceType = balenceType;
+    public AccountDetails(String transaction, String category, String date, String accountType, double amount, String note) {
+        this.transaction = transaction;
         this.category = category;
         this.date = date;
         this.accountType = accountType;
@@ -28,12 +28,12 @@ public class AccountDetails {
         this.note = note;
     }
 
-    public String getBalenceType() {
-        return balenceType;
+    public String getTransaction() {
+        return transaction;
     }
 
-    public void setBalenceType(String balenceType) {
-        this.balenceType = balenceType;
+    public void setTransaction(String transaction) {
+        this.transaction = transaction;
     }
 
     public int getId() {

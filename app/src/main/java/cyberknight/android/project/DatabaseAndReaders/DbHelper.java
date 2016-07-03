@@ -38,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
             + KEY_DATE + " VARCHAR(10) , "
             + KEY_ACCOUNT_TYPE + " VARCHAR (10) , "
             + KEY_AMOUNT + " REAL , "
-            + KEY_NOTE + " VARCHAR (10) , "
+            + KEY_NOTE + " VARCHAR (100) , "
             + KEY_BALANCE_TYPE + " VARCHAR (10) "
             + ")";
 
@@ -122,7 +122,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.update(ACCOUNTS_TABLE, values, KEY_ACCOUNT_NAME + " = " + account, null);
     }
 
-    public void changeRecord(int id,String balanceType,int amount, String date,String category,String accountType,String note){
+    public void changeRecord(int id,String balanceType, double amount, String date,String category,String accountType,String note){
 
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG,"Updated message status");
@@ -157,7 +157,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
+                account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -190,7 +190,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
+                account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -226,7 +226,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if(c.getString(c.getColumnIndex(KEY_DATE)).contains(search)){
                     AccountDetails account = new AccountDetails();
                     account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                    account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
+                    account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                     account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                     account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                     account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -261,7 +261,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
+                account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));

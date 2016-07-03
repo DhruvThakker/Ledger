@@ -87,7 +87,7 @@ public class PieChartFragment extends Fragment {
         }
 
         for(int i=0; i<mfoodRecords.size(); i++){
-            if(mfoodRecords.get(i).getBalenceType().equals("Income"))   income += mfoodRecords.get(i).getAmount();
+            if(mfoodRecords.get(i).getTransaction().equals("Income"))   income += mfoodRecords.get(i).getAmount();
         }
 
         Log.d("No Of Category",categories.size()+"");
@@ -119,7 +119,7 @@ public class PieChartFragment extends Fragment {
         double amount = 0;
 
         for(int i=0;i<mfoodRecords.size();i++){
-            if(mfoodRecords.get(i).getCategory().equals(category) && mfoodRecords.get(i).getBalenceType().equals("Expense")){
+            if(mfoodRecords.get(i).getCategory().equals(category) && mfoodRecords.get(i).getTransaction().equals("Expense")){
                 amount+=mfoodRecords.get(i).getAmount();
             }
         }
