@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.navDrawer);
-
         drawerPane = (LinearLayout) findViewById(R.id.drawerPane);
 
         navButtons[0] = (LinearLayout) findViewById(R.id.navHome);
@@ -101,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        drawerPane.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         try {
             getSupportActionBar().setElevation(3);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -115,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.action_bar_menu, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -8,10 +8,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.text.ParseException;
@@ -31,6 +34,8 @@ import cyberknight.android.project.R;
 public class NewRecord extends DialogFragment{
 
     private DbHelper database;
+    private JsonReader jsonReader;
+    private String transaction;
 
     static NewRecord newInstance(int num) {
         NewRecord f = new NewRecord();
@@ -52,22 +57,22 @@ public class NewRecord extends DialogFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_new_record,container,false);
 
-        Spinner transaction = (Spinner)v.findViewById(R.id.spinnerTransaction);
         final Spinner category = (Spinner)v.findViewById(R.id.spinnerCategory);
         final Spinner paymentType = (Spinner)v.findViewById(R.id.spinnerPaymentType);
         final EditText amount = (EditText) v.findViewById(R.id.textAmount);
         final EditText note = (EditText) v.findViewById(R.id.textNote);
         final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
+        final LinearLayout transactionBack = (LinearLayout) v.findViewById(R.id.transactionBackground);
+        final LinearLayout expense = (LinearLayout) v.findViewById(R.id.expenseListener);
+        final LinearLayout income = (LinearLayout) v.findViewById(R.id.incomeListener);
+        final ImageView expenseBar = (ImageView) v.findViewById(R.id.expenseBar);
+        final ImageView incomeBar = (ImageView) v.findViewById(R.id.incomeBar);
 
-        JsonReader jsonReader = new JsonReader(v.getContext());
+        jsonReader = new JsonReader(v.getContext());
         database = new DbHelper(MainActivity.applicationContext);
+        transaction = "Expense";
 
-        ArrayList<String> trans = new ArrayList<>();
-        trans.add("Income");
-        trans.add("Expense");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item_head ,trans);
-        transaction.setAdapter(adapter);
-        adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getCategories());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getExpenseCategories());
         category.setAdapter(adapter);
         adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
         paymentType.setAdapter(adapter);
@@ -88,7 +93,7 @@ public class NewRecord extends DialogFragment{
                 getDialog().setCancelable(true);
                 if(amount.getText().toString().equals("")) amount.setText("0");
                 Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()));
-                database.addRecord(Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                database.addRecord(transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords();
                 getDialog().dismiss();
@@ -99,11 +104,40 @@ public class NewRecord extends DialogFragment{
         addNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(amount.getText().toString().equals("")) amount.setText("0");
-                Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()));
-                database.addRecord(Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+                Log.d("NewRecord",date.getYear()+"-"+date.getMonth()+"-"+date.getDayOfMonth()+"\n\n\n"+getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth())+"-----"+transaction);
+                database.addRecord(transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords();
+                amount.setText("");
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , transaction.equals("Income")? jsonReader.getIncomeCategories(): jsonReader.getExpenseCategories());
+                category.setAdapter(adapter);
+                adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
+                paymentType.setAdapter(adapter);
+                note.setText("");
+            }
+        });
 
+        expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transactionBack.setBackgroundColor(getResources().getColor(R.color.red_400));
+                expenseBar.setBackgroundColor(getResources().getColor(R.color.grey_50));
+                incomeBar.setBackgroundColor(getResources().getColor(R.color.red_400));
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getExpenseCategories());
+                category.setAdapter(adapter);
+                transaction = "Expense";
+            }
+        });
+
+        income.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transactionBack.setBackgroundColor(getResources().getColor(R.color.green_400));
+                expenseBar.setBackgroundColor(getResources().getColor(R.color.green_400));
+                incomeBar.setBackgroundColor(getResources().getColor(R.color.grey_50));
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getIncomeCategories());
+                category.setAdapter(adapter);
+                transaction = "Income";
             }
         });
 

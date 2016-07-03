@@ -29,6 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_AMOUNT = "amount";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
     public static final String KEY_NOTE = "note";
+    public static final String KEY_BALANCE_TYPE = "balance_type";
 
     public static final String CREATE_TABLE_DAILY_INFO = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
             + "("
@@ -37,7 +38,8 @@ public class DbHelper extends SQLiteOpenHelper {
             + KEY_DATE + " VARCHAR(10) , "
             + KEY_ACCOUNT_TYPE + " VARCHAR (10) , "
             + KEY_AMOUNT + " REAL , "
-            + KEY_NOTE + " VARCHAR (10) "
+            + KEY_NOTE + " VARCHAR (10) , "
+            + KEY_BALANCE_TYPE + " VARCHAR (10) "
             + ")";
 
 
@@ -69,7 +71,7 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRecord(double amount, String date,String category,String accountType,String note){
+    public void addRecord(String balanceType, double amount, String date,String category,String accountType,String note){
 
         Log.d(TAG,"Adding Amount...");
 
@@ -81,6 +83,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(KEY_CATEGORY,category);
         values.put(KEY_ACCOUNT_TYPE,accountType);
         values.put(KEY_NOTE,note);
+        values.put(KEY_BALANCE_TYPE,balanceType);
 
         db.insert(TABLE_NAME,null,values);
 
@@ -119,7 +122,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.update(ACCOUNTS_TABLE, values, KEY_ACCOUNT_NAME + " = " + account, null);
     }
 
-    public void changeRecord(int id,int amount, String date,String category,String accountType,String note){
+    public void changeRecord(int id,String balanceType,int amount, String date,String category,String accountType,String note){
 
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG,"Updated message status");
@@ -130,6 +133,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(KEY_CATEGORY,category);
         values.put(KEY_ACCOUNT_TYPE,accountType);
         values.put(KEY_NOTE,note);
+        values.put(KEY_BALANCE_TYPE,balanceType);
 
         db.update(TABLE_NAME, values, KEY_ID + " = " + id,null);
 
@@ -153,6 +157,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -185,6 +190,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -220,6 +226,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if(c.getString(c.getColumnIndex(KEY_DATE)).contains(search)){
                     AccountDetails account = new AccountDetails();
                     account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                    account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                     account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                     account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                     account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
@@ -254,6 +261,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 AccountDetails account = new AccountDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                account.setBalenceType(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
                 account.setNote(c.getString(c.getColumnIndex(KEY_NOTE)));
                 account.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));

@@ -18,19 +18,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:id="@+id/drawerPane"
-        android:background="@color/grey_100"
+        android:background="@color/teal_200"
         android:orientation="vertical"
         android:scrollbars="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="5"
+            style="@style/OnPressed"
             android:id="@+id/navHome"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@android:color/white">
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:layout_width="0dp"
@@ -52,13 +47,8 @@
             android:layout_marginTop="25dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:id="@+id/navAccoout"
-                android:padding="10dp"
-                android:background="@android:color/white">
+                style="@style/OnPressed"
+                android:id="@+id/navAccoout">
 
                 <ImageView
                     android:layout_width="0dp"
@@ -79,13 +69,8 @@
                 android:background="@color/grey_100"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:id="@+id/navAnalysis"
-                android:padding="10dp"
-                android:background="@android:color/white">
+                style="@style/OnPressed"
+                android:id="@+id/navAnalysis">
 
                 <ImageView
                     android:layout_width="0dp"
@@ -106,13 +91,8 @@
                 android:background="@color/grey_100"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:id="@+id/navBudget"
-                android:padding="10dp"
-                android:background="@android:color/white">
+                style="@style/OnPressed"
+                android:id="@+id/navBudget">
 
                 <ImageView
                     android:layout_width="0dp"
@@ -136,13 +116,8 @@
             android:layout_marginTop="25dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:id="@+id/navSettings"
-                android:padding="10dp"
-                android:background="@android:color/white">
+                style="@style/OnPressed"
+                android:id="@+id/navSettings">
 
                 <ImageView
                     android:layout_width="0dp"
@@ -163,13 +138,8 @@
                 android:background="@color/grey_100"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:id="@+id/navAboutUs"
-                android:padding="10dp"
-                android:background="@android:color/white">
+                style="@style/OnPressed"
+                android:id="@+id/navAboutUs">
 
                 <ImageView
                     android:layout_width="0dp"

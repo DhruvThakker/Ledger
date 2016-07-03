@@ -39,11 +39,26 @@ public class JsonReader {
         return json;
     }
 
-    public ArrayList<String> getCategories(){
+    public ArrayList<String> getExpenseCategories(){
         ArrayList<String> categories = new ArrayList<>();
         try {
             JSONObject mainObj = new JSONObject(loadJSONFromAsset());
-            JSONArray array = mainObj.getJSONArray("Category");
+            JSONArray array = mainObj.getJSONArray("CategoryExpense");
+            Log.d("JsonReader","Categories array fetched");
+            for(int i=0; i<array.length(); i++){
+                categories.add(array.getString(i));
+            }
+        }catch(Exception je){
+            Toast.makeText(mContext,"Unable to fetch data",Toast.LENGTH_SHORT).show();
+        }
+        return categories;
+    }
+
+    public ArrayList<String> getIncomeCategories(){
+        ArrayList<String> categories = new ArrayList<>();
+        try {
+            JSONObject mainObj = new JSONObject(loadJSONFromAsset());
+            JSONArray array = mainObj.getJSONArray("CategoryIncome");
             Log.d("JsonReader","Categories array fetched");
             for(int i=0; i<array.length(); i++){
                 categories.add(array.getString(i));

@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         Log.d("current Date","------------------"+currentDate);
         allRecords = database.getAllAccountDetailsByDate(currentDate);
         if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-        else allRecords.add(new AccountDetails("No Entries today..","","",-1,""));
+        else allRecords.add(new AccountDetails("","No Entries today..","","",-1,""));
 
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             allRecords = database.getAllAccountDetailsByDate(currentDate);
             Log.d("Update Records","records"+allRecords+"-------");
             if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-            else allRecords.add(new AccountDetails("No Entries today..","","",-1,""));
+            else allRecords.add(new AccountDetails("","No Entries today..","","",-1,""));
             RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
             records.setAdapter(adapter);
     }

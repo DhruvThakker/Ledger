@@ -11,21 +11,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/transactionBackground"
         android:orientation="horizontal"
-        android:background="@color/red_400">
-        <TextView
-            android:layout_width="wrap_content"
+        android:background="@color/red_400"
+        android:weightSum="2">
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Transaction Type:"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            android:textSize="20sp"/>
-        <Spinner
-            android:layout_width="match_parent"
+            android:id="@+id/expenseListener"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expense"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_text"
+                android:gravity="center"
+                android:padding="8dp"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:id="@+id/expenseBar"
+                android:layout_height="3dp"
+                android:background="@color/grey_50"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:id="@+id/spinnerTransaction"
-            android:popupBackground="@color/red_400"/>
+            android:layout_weight="1"
+            android:id="@+id/incomeListener"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_text"
+                android:gravity="center"
+                android:padding="8dp"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:id="@+id/incomeBar"
+                android:layout_height="3dp"
+                android:background="@color/red_400"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,7 +99,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:padding="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +112,7 @@
             android:padding="5dp"/>
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="33dp"
             android:layout_gravity="end"
             android:id="@+id/spinnerCategory"
             android:gravity="end"/>
@@ -89,7 +121,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +133,7 @@
             android:textSize="@dimen/medium_text"/>
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="33dp"
             android:id="@+id/spinnerPaymentType"
             android:gravity="end"/>
     </LinearLayout>
@@ -106,7 +141,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
