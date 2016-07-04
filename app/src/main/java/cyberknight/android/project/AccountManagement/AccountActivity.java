@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import cyberknight.android.project.R;
 
-public class AccountManagementActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity {
 
     String fragment;
     @Override

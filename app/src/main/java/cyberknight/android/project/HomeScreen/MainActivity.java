@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,12 +18,17 @@ import android.widget.LinearLayout;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabSelectedListener;
 
-import cyberknight.android.project.AccountManagement.AccountAnalysisActivity;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import cyberknight.android.project.AccountManagement.AnalysisActivity;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
-import cyberknight.android.project.AccountManagement.AccountManagementActivity;
+import cyberknight.android.project.AccountManagement.AccountActivity;
+import cyberknight.android.project.DatabaseAndReaders.JsonReader;
 import cyberknight.android.project.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater{
 
     public static Context applicationContext;
     private LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private HomeFragment home;
+    private String currentDate;
+    private Fragment currentLoadedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         applicationContext = getApplicationContext();
         DbHelper database = new DbHelper(getApplicationContext());
 
+        try {
+            ArrayList<String> accountNames;
+            JsonReader tmp = new JsonReader(applicationContext);
+            accountNames = tmp.getAccountsNames();
+
+            for (int i = 0; i < accountNames.size(); i++) {
+                database.addInitialAmount(i, accountNames.get(i), 0);
+            }
+        }catch (Error e){
+            Log.d("MainActivity","Records Not Added");
+        }
+
+        currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         home = new HomeFragment();
         BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.setItemsFromMenu(R.menu.navigation_bottom_button, new OnMenuTabSelectedListener() {
@@ -57,19 +78,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (itemId) {
                     case R.id.home_item:
                         Log.d("daa","home");
+                        home.setDateTo(currentDate);
+                        currentLoadedFragment = home;
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
                         break;
                     case R.id.summary_item:
                         Log.d("daa","summary");
                         SummaryFragment summaryFragment = new SummaryFragment();
-                        summaryFragment.setDate(home.getCurrentDate());
+                        summaryFragment.setDateTo(currentDate);
+                        currentLoadedFragment = summaryFragment;
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.content_frame, summaryFragment).commit();
                         break;
                     case R.id.analysis_item:
                         AnalysisFragment analysisFragment = new AnalysisFragment();
-                        analysisFragment.setDate(home.getCurrentDate());
+                        analysisFragment.setDateTo(currentDate);
+                        currentLoadedFragment = analysisFragment;
                         fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.content_frame, analysisFragment).commit();
                         break;
@@ -78,8 +103,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
-        bottomBar.setActiveTabColor(getResources().getColor(R.color.primary));
+        //bottomBar.setBackgroundColor(getResources().getColor(R.color.primary));
+        bottomBar.setActiveTabColor(getResources().getColor(R.color.primary_dark));
 
+        home.setDateTo(currentDate);
+        currentLoadedFragment = home;
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
 
@@ -132,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_calendar) {
 
             DialogFragment calendarFragment = new CalendarFragment();
-            calendarFragment.setTargetFragment(home,0);
+            calendarFragment.setTargetFragment(currentLoadedFragment,0);
             calendarFragment.show(fragmentManager,"Calendar Fragment");
 
             return true;
@@ -151,21 +179,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.navHome:
+                home.setDateTo(currentDate);
+                currentLoadedFragment = home;
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
                 setTitle("Home");
                 break;
             case R.id.navAccoout:
-                Intent i = new Intent(MainActivity.this,AccountManagementActivity.class);
+                Intent i = new Intent(MainActivity.this,AccountActivity.class);
                 i.putExtra("Fragment","Accounts");
                 startActivity(i);
                 break;
             case R.id.navAnalysis:
-                i = new Intent(MainActivity.this,AccountAnalysisActivity.class);
+                i = new Intent(MainActivity.this,AnalysisActivity.class);
                 startActivity(i);
                 break;
             case R.id.navBudget:
-                i = new Intent(MainActivity.this,AccountManagementActivity.class);
+                i = new Intent(MainActivity.this,AccountActivity.class);
                 i.putExtra("Fragment","Budget");
                 startActivity(i);
                 break;
@@ -178,5 +208,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
         }
         mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    public void updateScreenRecords() {
+
+    }
+
+    @Override
+    public void setDateTo(String date) {
+        currentDate = date;
     }
 }

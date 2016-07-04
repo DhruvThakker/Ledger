@@ -34,6 +34,7 @@ public class CalendarFragment extends DialogFragment {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 RecordScreenUpdater recordScreenUpdater = (RecordScreenUpdater) getTargetFragment();
                 recordScreenUpdater.setDateTo(NewRecord.getSringFormatForDate(year,month+1,dayOfMonth));
+                recordScreenUpdater.updateScreenRecords();
                 getDialog().dismiss();
             }
         });

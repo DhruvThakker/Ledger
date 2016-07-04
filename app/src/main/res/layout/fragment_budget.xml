@@ -6,45 +6,67 @@
     android:layout_height="match_parent"
     tools:context=".AccountManagement.BudgetFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/account_budget"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/medium_text"
+            android:padding="10dp"
+            android:text="@string/budget"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/grey_300"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="2"
-        android:padding="2dp"
-        android:background="@android:color/white">
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:elevation="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="10">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="5.5"
             android:layout_height="wrap_content"
-            android:text="Monthly Budget"
-            android:textSize="@dimen/medium_text"
+            android:layout_gravity="center_vertical"
+            android:text="Monthly Budget: "
+            android:textSize="@dimen/large_text"
             android:textStyle="italic"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="3.5"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:inputType="numberDecimal"
+            android:id="@+id/edit_monthlybudget"/>
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:id="@+id/edit_monthlybudget"/>
-
-            <Button
-                android:id="@+id/budone"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="OK"
-                android:textSize="@dimen/medium_text"/>
-
-        </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/budone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_selector"
+            android:textSize="@dimen/small_text"
+            android:src="@drawable/btn_ok"/>
 
     </LinearLayout>
 
@@ -52,15 +74,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:padding="2dp">
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="DailyBudget"
-            android:textSize="@dimen/medium_text"
+            android:text="Daily Budget"
+            android:textSize="@dimen/large_text"
             android:textStyle="italic"/>
 
         <TextView
@@ -69,7 +94,8 @@
             android:layout_height="wrap_content"
             android:text="0.00"
             android:id="@+id/tvDailyBudget"
-            android:textSize="@dimen/medium_text"
+            android:textColor="@color/green_400"
+            android:textSize="@dimen/large_text"
             android:textStyle="bold"
             android:gravity="end"/>
 
@@ -79,15 +105,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:padding="2dp">
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Weekly Budget"
-            android:textSize="@dimen/medium_text"
+            android:text="Weekly Budget: "
+            android:textSize="@dimen/large_text"
             android:textStyle="italic"/>
 
         <TextView
@@ -96,7 +125,8 @@
             android:layout_height="wrap_content"
             android:text="0.00"
             android:id="@+id/tvWeeklyBudget"
-            android:textSize="@dimen/medium_text"
+            android:textColor="@color/green_400"
+            android:textSize="@dimen/large_text"
             android:textStyle="bold"
             android:gravity="end"/>
 
@@ -106,15 +136,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:padding="2dp">
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="YearlyBudget"
-            android:textSize="@dimen/medium_text"
+            android:text="Yearly Budget"
+            android:textSize="@dimen/large_text"
             android:textStyle="italic"/>
 
         <TextView
@@ -123,17 +156,11 @@
             android:layout_height="wrap_content"
             android:text="0.00"
             android:id="@+id/tvYearlyBudget"
-            android:textSize="@dimen/medium_text"
+            android:textSize="@dimen/large_text"
+            android:textColor="@color/green_400"
             android:textStyle="bold"
             android:gravity="end"/>
 
     </LinearLayout>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Alert me"
-        android:textSize="@dimen/medium_text"
-        android:id="@+id/checkBox" />
 
 </LinearLayout>

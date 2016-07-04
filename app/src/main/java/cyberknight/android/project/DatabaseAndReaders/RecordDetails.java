@@ -3,7 +3,7 @@ package cyberknight.android.project.DatabaseAndReaders;
 /**
  * Created by umang on 30/6/16.
  */
-public class AccountDetails {
+public class RecordDetails {
 
     private int id;
     private String transaction;
@@ -13,13 +13,13 @@ public class AccountDetails {
     private double amount;
     private String note;
 
-    public AccountDetails() {
+    public RecordDetails() {
         this.category = "";
         this.accountType = "";
         this.note = "";
     }
 
-    public AccountDetails(String transaction, String category, String date, String accountType, double amount, String note) {
+    public RecordDetails(String transaction, String category, String date, String accountType, double amount, String note) {
         this.transaction = transaction;
         this.category = category;
         this.date = date;
@@ -29,7 +29,7 @@ public class AccountDetails {
     }
 
     public String getTransaction() {
-        return transaction;
+        return this.transaction;
     }
 
     public void setTransaction(String transaction) {

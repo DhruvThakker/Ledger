@@ -1,20 +1,20 @@
 {
   "CategoryExpense": [
     "Food",
-    "Enterainment",
+    "Entertainment",
     "Travel",
     "Education",
     "Clothing/Beauty",
     "Medical",
     "Social",
-    "Other"
+    "Other Expense"
   ],
 
   "CategoryIncome":[
     "Salary",
     "Pocket Money",
     "Part-Time job",
-    "Other"
+    "Other Income"
   ],
 
   "AccountNames":[

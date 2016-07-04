@@ -16,7 +16,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 
 import java.util.ArrayList;
 
-import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
+import cyberknight.android.project.DatabaseAndReaders.RecordDetails;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
 import cyberknight.android.project.DatabaseAndReaders.MyColorTemplate;
@@ -28,17 +28,12 @@ import cyberknight.android.project.R;
  */
 public class PieChartFragment extends Fragment {
 
-
-    private ArrayList<String> categories = new ArrayList<>();
     private JsonReader jsonReader = new JsonReader(MainActivity.applicationContext);
-    private PieChart pieChart;
-    private ArrayList<AccountDetails> mfoodRecords=new ArrayList<>();
+    private ArrayList<RecordDetails> mfoodRecords=new ArrayList<>();
     private String current;
     private String reportOf;
     private double income = 0;
-    private double expence = 0;
-    private LinearLayout layoutincome,layoutexpense;
-    private TextView textViewincome,textViewexpense;
+    private double expense = 0;
 
     public void setReportOf(String reportOf) {
         this.reportOf = reportOf;
@@ -58,13 +53,12 @@ public class PieChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_pie_chart, container, false);
 
-        pieChart = (PieChart) view.findViewById(R.id.pieChart);
-        layoutincome = (LinearLayout) view.findViewById(R.id.chart_income);
-        layoutexpense = (LinearLayout) view.findViewById(R.id.chart_expense);
-        textViewincome = (TextView) view.findViewById(R.id.chart_income_text);
-        textViewexpense = (TextView) view.findViewById(R.id.chart_expense_text);
+        PieChart pieChart = (PieChart) view.findViewById(R.id.pieChart);
+        TextView textViewIncome = (TextView) view.findViewById(R.id.chart_income_text);
+        TextView textViewExpense = (TextView) view.findViewById(R.id.chart_expense_text);
+        TextView textViewBalance = (TextView) view.findViewById(R.id.chart_balance_text);
 
-        categories = jsonReader.getExpenseCategories();
+        ArrayList<String> categories = jsonReader.getExpenseCategories();
         dbHelper=new DbHelper(MainActivity.applicationContext);
 
         if(reportOf.equals("Date")){
@@ -74,7 +68,7 @@ public class PieChartFragment extends Fragment {
             mfoodRecords = dbHelper.getAllAccountDetailsByMonth(current.substring(0,4),current.substring(5,7));
         }
 
-        for (int i=0;i<categories.size();i++){
+        for (int i = 0; i< categories.size(); i++){
             double temp = getAmountOfCategory(categories.get(i));
             if(temp==0){
                 categories.remove(i);
@@ -83,14 +77,14 @@ public class PieChartFragment extends Fragment {
             else{
                 entries.add(new Entry((float)temp,i));
             }
-            expence+=temp;
+            expense+=temp;
         }
 
         for(int i=0; i<mfoodRecords.size(); i++){
             if(mfoodRecords.get(i).getTransaction().equals("Income"))   income += mfoodRecords.get(i).getAmount();
         }
 
-        Log.d("No Of Category",categories.size()+"");
+        Log.d("No Of Category", categories.size()+"");
 
         PieDataSet dataset = new PieDataSet(entries, "Categories");
         PieData data = new PieData(categories, dataset); // initialize Piedata
@@ -103,14 +97,9 @@ public class PieChartFragment extends Fragment {
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText(current);
 
-        textViewincome.setText(income+"");
-        textViewexpense.setText(expence+"");
-
-        if (income>0) layoutincome.setBackgroundColor(getResources().getColor(R.color.green_400));
-        else layoutincome.setBackgroundColor(getResources().getColor(R.color.orange_400));
-
-        if (expence>0) layoutexpense.setBackgroundColor(getResources().getColor(R.color.red_400));
-        else layoutexpense.setBackgroundColor(getResources().getColor(R.color.orange_400));
+        textViewIncome.setText(income+"");
+        textViewExpense.setText(expense+"");
+        textViewBalance.setText((income-expense)+"");
 
         return view;
     }

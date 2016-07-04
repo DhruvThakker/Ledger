@@ -1,5 +1,6 @@
 package cyberknight.android.project.HomeScreen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,9 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
+import cyberknight.android.project.DatabaseAndReaders.RecordDetails;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.R;
 
@@ -33,9 +33,16 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
 
     private ListView records;
     private DbHelper database;
-    private ArrayList<AccountDetails> allRecords;
+    private ArrayList<RecordDetails> allRecords;
     private String currentDate;
     private TextView pageDate;
+    private Activity parentActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        parentActivity = activity;
+    }
 
     public HomeFragment(){}
 
@@ -49,11 +56,11 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         records = (ListView) view.findViewById(R.id.recordList);
         database = new DbHelper(MainActivity.applicationContext);
 
-        currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
         Log.d("current Date","------------------"+currentDate);
         allRecords = database.getAllAccountDetailsByDate(currentDate);
-        if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-        else allRecords.add(new AccountDetails("","No Entries today..","","",-1,""));
+        if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new RecordDetails());
+        else allRecords.add(new RecordDetails("","No Entries today..","","",-1,""));
 
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
@@ -102,19 +109,18 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
 
     @Override
     public void updateScreenRecords() {
-            allRecords = database.getAllAccountDetailsByDate(currentDate);
-            Log.d("Update Records","records"+allRecords+"-------");
-            if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new AccountDetails());
-            else allRecords.add(new AccountDetails("","No Entries today..","","",-1,""));
-            RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
-            records.setAdapter(adapter);
+        allRecords = database.getAllAccountDetailsByDate(currentDate);
+        Log.d("Update Records","records"+allRecords+"-------");
+        if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new RecordDetails());
+        else allRecords.add(new RecordDetails("","No Entries today..","","",-1,""));
+        RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
+        records.setAdapter(adapter);
+        pageDate.setText(currentDate);
     }
 
     @Override
     public void setDateTo(String date) {
         currentDate = date;
-        pageDate.setText(date);
-        updateScreenRecords();
     }
 
     public String getCurrentDate(){ return this.currentDate; }
@@ -137,6 +143,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
     public void onClick(View v) {
         if(v.getId()==R.id.previousDate)    currentDate = changeDate(currentDate,-1);
         else    currentDate = changeDate(currentDate,1);
+        ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
         pageDate.setText(currentDate);
         updateScreenRecords();
     }
@@ -144,7 +151,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
     class RecordAdapter extends BaseAdapter {
 
         Context fContext;
-        ArrayList<AccountDetails> fRecordItems;
+        ArrayList<RecordDetails> fRecordItems;
 
         public RecordAdapter(Context fContext, ArrayList fRecordItems){
             this.fContext = fContext;
@@ -185,22 +192,58 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             text2.setText(fRecordItems.get(position).getNote());
             text3.setText((fRecordItems.get(position).getCategory().equals("No Entries today..")||fRecordItems.get(position).getCategory().equals(""))?
                     "":String.valueOf(fRecordItems.get(position).getAmount()));
+            String temp = fRecordItems.get(position).getTransaction();
+            if(temp!=null && temp.equals("Income"))    text3.setTextColor(getResources().getColor(R.color.green_400));
+            else text3.setTextColor(getResources().getColor(R.color.red_400));
             text4.setText(fRecordItems.get(position).getAccountType());
             iconView.setImageResource(getIconFor(fRecordItems.get(position).getCategory()));
 
             return view;
         }
+    }
 
-        private int getIconFor(String s){
-            int icon;
-            switch (s){
-                case "Food":
-                    icon = R.drawable.new_record;
-                    break;
-                default:
-                    icon = 0;
-            }
-            return icon;
+    public static int getIconFor(String s){
+        int icon;
+        switch (s){
+            case "Food":
+                icon = R.drawable.item_food;
+                break;
+            case "Entertainment":
+                icon = R.drawable.item_entertainment;
+                break;
+            case "Travel":
+                icon = R.drawable.item_travel;
+                break;
+            case "Education":
+                icon = R.drawable.item_education;
+                break;
+            case "Clothing/Beauty":
+                icon = R.drawable.item_clothing;
+                break;
+            case "Social":
+                icon = R.drawable.item_social;
+                break;
+            case "Medical":
+                icon = R.drawable.item_medical;
+                break;
+            case "Salary":
+                icon = R.drawable.item_salary;
+                break;
+            case "Pocket Money":
+                icon = R.drawable.item_pockey_money;
+                break;
+            case "Part-Time job":
+                icon = R.drawable.item_part_time_job;
+                break;
+            case "Other Expense":
+                icon = R.drawable.item_other_expense;
+                break;
+            case "Other Income":
+                icon = R.drawable.item_other_income;
+                break;
+            default:
+                icon = 0;
         }
+        return icon;
     }
 }

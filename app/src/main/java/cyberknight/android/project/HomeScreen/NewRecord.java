@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -37,8 +38,8 @@ public class NewRecord extends DialogFragment{
     private String transaction;
     private int Id;
     private Spinner category, paymentType;
-    private LinearLayout transactionBack, expense, income;
-    private ImageView incomeBar,expenseBar;
+    private LinearLayout transactionBack;
+    private ImageView incomeBar,expenseBar,imageIcon;
 
     static NewRecord newInstance(int num) {
         NewRecord f = new NewRecord();
@@ -66,10 +67,11 @@ public class NewRecord extends DialogFragment{
         final EditText note = (EditText) v.findViewById(R.id.textNote);
         final DatePicker date = (DatePicker) v.findViewById(R.id.datePicker);
         transactionBack = (LinearLayout) v.findViewById(R.id.transactionBackground);
-        expense = (LinearLayout) v.findViewById(R.id.expenseListener);
-        income = (LinearLayout) v.findViewById(R.id.incomeListener);
+        final LinearLayout expense = (LinearLayout) v.findViewById(R.id.expenseListener);
+        final LinearLayout income = (LinearLayout) v.findViewById(R.id.incomeListener);
         expenseBar = (ImageView) v.findViewById(R.id.expenseBar);
         incomeBar = (ImageView) v.findViewById(R.id.incomeBar);
+        imageIcon = (ImageView) v.findViewById(R.id.imgCategory);
 
         jsonReader = new JsonReader(v.getContext());
         database = new DbHelper(MainActivity.applicationContext);
@@ -79,12 +81,14 @@ public class NewRecord extends DialogFragment{
         category.setAdapter(adapter);
         adapter = new ArrayAdapter<>(v.getContext(), R.layout.spinner_item , jsonReader.getAccountsNames());
         paymentType.setAdapter(adapter);
+        imageIcon.setImageResource(HomeFragment.getIconFor(category.getSelectedItem().toString()));
 
         String currDate;
         if(getArguments().getString("Mode").equals("edit")){
             Id = getArguments().getInt("Id");
             currDate = getArguments().getString("Date");
             amount.setText(String.valueOf(getArguments().getDouble("Amount")));
+            double previousAmount = getArguments().getDouble("Amount");
             if(getArguments().getString("Transaction").equals("Expense")) {
                 setTransactionTypeExpense();
                 ArrayList<String> expenseCategories = jsonReader.getExpenseCategories();
@@ -94,6 +98,7 @@ public class NewRecord extends DialogFragment{
                         break;
                     }
                 }
+                database.modifyAccount(getArguments().getString("PaymentType"), previousAmount,true);
             }
             else{
                 setTransactionTypeIncome();
@@ -104,10 +109,11 @@ public class NewRecord extends DialogFragment{
                         break;
                     }
                 }
+                database.modifyAccount(getArguments().getString("PaymentType"), previousAmount *-1,true);
             }
             ArrayList<String> payment = jsonReader.getAccountsNames();
             for(int i=0; i<payment.size(); i++){
-                if(payment.get(i).equals(getArguments().getString("Category"))){
+                if(payment.get(i).equals(getArguments().getString("PaymentType"))){
                     paymentType.setSelection(i);
                     break;
                 }
@@ -124,6 +130,18 @@ public class NewRecord extends DialogFragment{
             e.printStackTrace();
         }
 
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                imageIcon.setImageResource(HomeFragment.getIconFor(category.getSelectedItem().toString()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         Button save = (Button)v.findViewById(R.id.btnSave);
         save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -132,6 +150,9 @@ public class NewRecord extends DialogFragment{
 
                 if(getArguments().getString("Mode").equals("edit")) database.changeRecord(Id,transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 else    database.addRecord(transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+
+                if(transaction.equals("Income")) database.modifyAccount(paymentType.getSelectedItem().toString(),Double.parseDouble(amount.getText().toString()),true);
+                else database.modifyAccount(paymentType.getSelectedItem().toString(),Double.parseDouble(amount.getText().toString())*-1,true);
 
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords();
@@ -146,6 +167,9 @@ public class NewRecord extends DialogFragment{
 
                 if(getArguments().getString("Mode").equals("edit")) database.changeRecord(Id,transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
                 else    database.addRecord(transaction,Double.parseDouble(amount.getText().toString()), getSringFormatForDate(date.getYear(),date.getMonth()+1,date.getDayOfMonth()),category.getSelectedItem().toString(),paymentType.getSelectedItem().toString(),note.getText().toString());
+
+                if(transaction.equals("Income")) database.modifyAccount(paymentType.getSelectedItem().toString(),Double.parseDouble(amount.getText().toString()),true);
+                else database.modifyAccount(paymentType.getSelectedItem().toString(),Double.parseDouble(amount.getText().toString())*-1,true);
 
                 RecordScreenUpdater mUpdater = (RecordScreenUpdater) getTargetFragment();
                 mUpdater.updateScreenRecords();

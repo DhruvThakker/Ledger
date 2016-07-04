@@ -35,7 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
             + KEY_CATEGORY + " VARCHAR (20) , "
-            + KEY_DATE + " VARCHAR(10) , "
+            + KEY_DATE + " VARCHAR (10) , "
             + KEY_ACCOUNT_TYPE + " VARCHAR (10) , "
             + KEY_AMOUNT + " REAL , "
             + KEY_NOTE + " VARCHAR (100) , "
@@ -49,7 +49,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_TABLE_ACCOUNTS_TABLE = "CREATE TABLE IF NOT EXISTS " + ACCOUNTS_TABLE
             + "("
-            + KEY_ACCOUNT_NAME + " VARCHAR (20) PRIMARY KEY , "
+            + KEY_ID + " INTEGER PRIMARY KEY , "
+            + KEY_ACCOUNT_NAME + " VARCHAR , "
             + KEY_ACCOUNT_AMOUNT + " REAL "
             + ")";
 
@@ -71,9 +72,25 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRecord(String balanceType, double amount, String date,String category,String accountType,String note){
+    public void addInitialAmount(int id, String accountName, double initialAmount){
 
         Log.d(TAG,"Adding Amount...");
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID,id);
+        values.put(KEY_ACCOUNT_NAME,accountName);
+        values.put(KEY_ACCOUNT_AMOUNT,initialAmount);
+
+
+        Log.d(TAG,"RECORD ADDED++++++++++++++++++++++++++++++++++++++++ "+values);
+        db.insert(ACCOUNTS_TABLE,null,values);
+    }
+
+    public void addRecord(String balanceType, double amount, String date,String category,String accountType,String note){
+
+        Log.d(TAG,"Adding Record...");
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -92,34 +109,25 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void modifyAccount(String account, double amount, boolean add){
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_ACCOUNT_NAME + " = '" + account;
-
-        SQLiteDatabase db;
         double initialAmount=0;
 
         if(add) {
-            db = this.getReadableDatabase();
-            Cursor c = db.rawQuery(selectQuery, null);
-
-            if (c.moveToFirst()) {
-                do {
-                    if (c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)).equals(account)) {
-                        initialAmount = c.getDouble(c.getColumnIndex(KEY_ACCOUNT_AMOUNT));
-                        break;
-                    }
-                } while (c.moveToNext());
-            }
+            initialAmount = getAmountByName(account);
         }
 
-        db = this.getWritableDatabase();
+        int id;
+        if(account.equals("Cash")) id = 0;
+        else if(account.equals("Card")) id = 1;
+        else id = 2;
+
+        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ACCOUNT_NAME, account);
 
         if(add) values.put(KEY_ACCOUNT_AMOUNT, initialAmount+amount);
         else values.put(KEY_ACCOUNT_AMOUNT, amount);
 
-        db.update(ACCOUNTS_TABLE, values, KEY_ACCOUNT_NAME + " = " + account, null);
+        db.update(ACCOUNTS_TABLE, values, KEY_ID + " = " + id, null);
     }
 
     public void changeRecord(int id,String balanceType, double amount, String date,String category,String accountType,String note){
@@ -139,9 +147,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<AccountDetails> getAllAccountDetails() {
+    public double getAmountByName(String amountType){
 
-        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+        double amount = 0;
+
+        String selectQuery = "SELECT  * FROM " + ACCOUNTS_TABLE + " tm WHERE tm." + KEY_ACCOUNT_NAME + " = '" + amountType +"' ORDER BY tm." +KEY_ID + " DESC";
+
+        Log.d(TAG, "Get All Date Query "+selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Log.d(TAG, "Date Cursor "+c.toString());
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                amount+=c.getDouble(c.getColumnIndex(KEY_ACCOUNT_AMOUNT));
+                Log.d(TAG, "\n\n\n\n\n\n\nGet All Date Query=================== "+amount);
+
+            } while (c.moveToNext());
+        }
+        return amount;
+    }
+
+    public ArrayList<RecordDetails> getAllAccountDetails() {
+
+        ArrayList<RecordDetails> accountModels = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tq ";
 
         Log.e(TAG, "Get All Details " + selectQuery);
@@ -155,7 +186,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
 
-                AccountDetails account = new AccountDetails();
+                RecordDetails account = new RecordDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
@@ -171,9 +202,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return accountModels;
     }
 
-    public ArrayList<AccountDetails> getAllAccountDetailsByDate(String date) {
+    public ArrayList<RecordDetails> getAllAccountDetailsByDate(String date) {
 
-        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+        ArrayList<RecordDetails> accountModels = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_DATE + " = '" + date +"' ORDER BY tm." +KEY_ID + " DESC";
 
@@ -188,7 +219,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
 
-                AccountDetails account = new AccountDetails();
+                RecordDetails account = new RecordDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
@@ -203,9 +234,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return accountModels;
     }
 
-    public ArrayList<AccountDetails> getAllAccountDetailsByMonth(String year,String month) {
+    public ArrayList<RecordDetails> getAllAccountDetailsByMonth(String year, String month) {
 
-        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+        ArrayList<RecordDetails> accountModels = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm ";
 
@@ -224,7 +255,7 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
 
                 if(c.getString(c.getColumnIndex(KEY_DATE)).contains(search)){
-                    AccountDetails account = new AccountDetails();
+                    RecordDetails account = new RecordDetails();
                     account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                     account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                     account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));
@@ -242,9 +273,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return accountModels;
     }
 
-    public ArrayList<AccountDetails> getAllAccountDetailsByCategory(String category) {
+    public ArrayList<RecordDetails> getAllAccountDetailsByCategory(String category) {
 
-        ArrayList<AccountDetails> accountModels = new ArrayList<>();
+        ArrayList<RecordDetails> accountModels = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_NAME + " tm WHERE tm." + KEY_CATEGORY + " = '" + category +"' ORDER BY tm." +KEY_DATE + " DESC";
 
@@ -259,7 +290,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
 
-                AccountDetails account = new AccountDetails();
+                RecordDetails account = new RecordDetails();
                 account.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 account.setTransaction(c.getString(c.getColumnIndex(KEY_BALANCE_TYPE)));
                 account.setAmount(c.getDouble(c.getColumnIndex(KEY_AMOUNT)));

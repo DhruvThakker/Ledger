@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import cyberknight.android.project.R;
 
-public class AccountAnalysisActivity extends AppCompatActivity {
+public class AnalysisActivity extends AppCompatActivity {
 
     private DrawerAnalysisFragment drawerAnalysisFragment;
     private PieChartFragment chartReport;

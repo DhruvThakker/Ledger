@@ -24,6 +24,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_menu_left"
+                android:background="@drawable/button_selector"
                 android:layout_gravity="start"/>
 
             <TextView
@@ -42,6 +43,7 @@
                 android:id="@+id/nextDate"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:background="@drawable/button_selector"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_menu_right"
                 android:layout_gravity="end"/>

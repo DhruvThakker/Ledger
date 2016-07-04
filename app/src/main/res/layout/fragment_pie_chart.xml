@@ -19,15 +19,16 @@
         android:weightSum="2"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:id="@+id/chart_income"
-        android:background="@color/orange_300"
-        android:gravity="center">
+        android:background="@color/green_300"
+        android:gravity="center"
+        android:scrollbars="vertical">
 
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:text="Income"
+            android:textColor="@color/white"
             android:textSize="@dimen/large_text"/>
 
         <TextView
@@ -35,6 +36,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:id="@+id/chart_income_text"
+            android:textColor="@color/white"
             android:text="0.00"
             android:textSize="@dimen/large_text"
             android:gravity="end"/>
@@ -43,8 +45,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"/>
+        android:layout_height="1dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,8 +54,7 @@
         android:weightSum="2"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:id="@+id/chart_expense"
-        android:background="@color/orange_300"
+        android:background="@color/red_300"
         android:gravity="center">
 
         <TextView
@@ -62,6 +62,7 @@
             android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:text="Expense"
+            android:textColor="@color/white"
             android:textSize="@dimen/large_text"/>
 
         <TextView
@@ -69,6 +70,41 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:id="@+id/chart_expense_text"
+            android:textColor="@color/white"
+            android:text="0.00"
+            android:textSize="@dimen/large_text"
+            android:gravity="end"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@color/orange_300"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Expense"
+            android:textSize="@dimen/large_text"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:id="@+id/chart_balance_text"
+            android:textColor="@color/white"
             android:text="0.00"
             android:textSize="@dimen/large_text"
             android:gravity="end"/>

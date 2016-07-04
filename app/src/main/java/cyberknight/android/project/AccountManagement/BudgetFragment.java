@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ public class BudgetFragment extends Fragment {
 
     TextView textdaily,textweekly,textyearly;
     EditText edittextmonthly;
-    Button okbutton;
+    ImageButton okbutton;
     public static final String BUDGET_PREFRENCES_FILE = "BudgetFile";
     SharedPreferences budget;
 
@@ -38,10 +39,14 @@ public class BudgetFragment extends Fragment {
         textweekly = (TextView) view.findViewById(R.id.tvWeeklyBudget);
         textdaily = (TextView) view.findViewById(R.id.tvDailyBudget);
         textyearly = (TextView) view.findViewById(R.id.tvYearlyBudget);
-        okbutton = (Button) view.findViewById(R.id.budone);
+        okbutton = (ImageButton) view.findViewById(R.id.budone);
 
         budget = MainActivity.applicationContext.getSharedPreferences(BUDGET_PREFRENCES_FILE, Context.MODE_PRIVATE);
-        edittextmonthly.setText(String.valueOf(budget.getFloat("budget",0.00f)));
+        double budgetMonthly = budget.getFloat("budget",0.00f);
+        edittextmonthly.setText(String.valueOf(budgetMonthly));
+        textweekly.setText(Math.round(budgetMonthly * 100d / 4)/100d+ "");
+        textdaily.setText(Math.round(budgetMonthly * 100d / 30)/100d + "");
+        textyearly.setText(Math.round(budgetMonthly * 100d / 4)/100d + "");
 
         okbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,9 +55,9 @@ public class BudgetFragment extends Fragment {
                     double dbudget = Double.parseDouble(edittextmonthly.getText().toString());
                     SharedPreferences.Editor editor = budget.edit();
                     editor.putFloat("budget",(float) dbudget);
-                    textweekly.setText(dbudget / 4 + "");
-                    textdaily.setText(dbudget / 30 + "");
-                    textyearly.setText(dbudget * 12 + "");
+                    textweekly.setText(Math.round(dbudget * 100d / 4)/100d + "");
+                    textdaily.setText(Math.round(dbudget * 100d / 30)/100d + "");
+                    textyearly.setText(Math.round(dbudget * 100d / 4)/100d + "");
                     editor.apply();
                 }catch(Exception e){
                     Toast.makeText(getContext(),"Enter some values",Toast.LENGTH_SHORT).show();

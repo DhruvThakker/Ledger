@@ -28,6 +28,7 @@
             style="@style/OnPressed"
             android:id="@+id/navHome"
             android:layout_marginTop="10dp"
+            android:weightSum="5"
             android:background="@color/primary_light">
 
             <ImageView
@@ -54,6 +55,7 @@
                 android:background="@color/grey_200"/>
             <LinearLayout
                 style="@style/OnPressed"
+                android:weightSum="5"
                 android:id="@+id/navAccoout">
 
                 <ImageView
@@ -76,6 +78,7 @@
 
             <LinearLayout
                 style="@style/OnPressed"
+                android:weightSum="5"
                 android:id="@+id/navAnalysis">
 
                 <ImageView
@@ -98,6 +101,7 @@
 
             <LinearLayout
                 style="@style/OnPressed"
+                android:weightSum="5"
                 android:id="@+id/navBudget">
 
                 <ImageView
@@ -129,6 +133,7 @@
                 android:background="@color/grey_200"/>
             <LinearLayout
                 style="@style/OnPressed"
+                android:weightSum="5"
                 android:id="@+id/navSettings">
 
                 <ImageView
@@ -151,6 +156,7 @@
 
             <LinearLayout
                 style="@style/OnPressed"
+                android:weightSum="5"
                 android:id="@+id/navAboutUs">
 
                 <ImageView

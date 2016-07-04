@@ -14,12 +14,13 @@
         android:padding="10dp"
         android:textSize="@dimen/large_text"
         android:textColor="@color/white"
-        android:background="@color/teal_500"/>
+        android:background="@color/accent"/>
     <CalendarView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/calendar"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:showWeekNumber="true"/>
 
 </LinearLayout>

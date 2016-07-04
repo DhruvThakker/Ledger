@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cyberknight.android.project.DatabaseAndReaders.AccountDetails;
+import cyberknight.android.project.DatabaseAndReaders.RecordDetails;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.R;
 
@@ -25,7 +25,7 @@ import cyberknight.android.project.R;
  */
 public class RecordDialogFragment extends DialogFragment{
 
-    private ArrayList<AccountDetails> records;
+    private ArrayList<RecordDetails> records;
     private int position;
 
     static RecordDialogFragment newInstance(int num) {
@@ -54,6 +54,7 @@ public class RecordDialogFragment extends DialogFragment{
         final TextView paymentType = (TextView) v.findViewById(R.id.recordPaymentType);
         final TextView note = (TextView) v.findViewById(R.id.recordNote);
         final TextView date = (TextView) v.findViewById(R.id.recordDate);
+        final ImageView imageIcon = (ImageView) v.findViewById(R.id.recordImgCategory);
         Button cancel = (Button) v.findViewById(R.id.recordCancel);
         Button modify = (Button) v.findViewById(R.id.recordModify);
         ImageView delete = (ImageView) v.findViewById(R.id.recordDelete);
@@ -66,6 +67,7 @@ public class RecordDialogFragment extends DialogFragment{
         title.setText(records.get(position).getTransaction());
         amount.setText("Rs. "+records.get(position).getAmount());
         category.setText(records.get(position).getCategory());
+        imageIcon.setImageResource(HomeFragment.getIconFor(category.getText().toString()));
         paymentType.setText(records.get(position).getAccountType());
         note.setText(records.get(position).getNote());
         date.setText(records.get(position).getDate());
@@ -80,16 +82,11 @@ public class RecordDialogFragment extends DialogFragment{
                         DbHelper database = new DbHelper(MainActivity.applicationContext);
                         if(database.deleteRecord(records.get(position).getId())) {
                             dialog.dismiss();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            builder.setTitle("Record Deleted");
                             dismissDialog();
-                            builder.create().show();
+                            database.modifyAccount(records.get(position).getAccountType(),
+                                    records.get(position).getTransaction().equals("Income")?
+                                            records.get(position).getAmount()*-1:records.get(position).getAmount(),
+                                    true);
                             RecordScreenUpdater updater = (RecordScreenUpdater) getTargetFragment();
                             updater.updateScreenRecords();
                         }
@@ -161,5 +158,35 @@ public class RecordDialogFragment extends DialogFragment{
 
     public void dismissDialog(){
         getDialog().dismiss();
+    }
+
+    private int getIconFor(String s){
+        int icon;
+        switch (s){
+            case "Food":
+                icon = R.drawable.item_food;
+                break;
+            case "Entertainment":
+                icon = R.drawable.item_entertainment;
+                break;
+            case "Travel":
+                icon = R.drawable.item_travel;
+                break;
+            case "Education":
+                icon = R.drawable.item_education;
+                break;
+            case "Clothing/Beauty":
+                icon = R.drawable.item_clothing;
+                break;
+            case "Social":
+                icon = R.drawable.item_social;
+                break;
+            case "Medical":
+                icon = R.drawable.item_medical;
+                break;
+            default:
+                icon = 0;
+        }
+        return icon;
     }
 }

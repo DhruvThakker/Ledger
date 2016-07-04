@@ -11,6 +11,8 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.Calendar;
+
 import cyberknight.android.project.HomeScreen.NewRecord;
 import cyberknight.android.project.R;
 
@@ -62,23 +64,45 @@ public class DrawerAnalysisFragment extends Fragment {
 
             }
         });
+        checked = 0;
 
         radioOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if (checkedId==R.id.rbByDate){
+                    checked = 0;
                     date = NewRecord.getSringFormatForDate(datePicker.getYear(),datePicker.getMonth()+1,datePicker.getDayOfMonth());
                     Log.d("Date: ",date);
                 }
                 else if (checkedId==R.id.rbByMonth) {
+                    checked = 1;
                     date = NewRecord.getSringFormatForDate(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()).substring(0, 7);
                     Log.d("Date: ", date);
                 }
             }
         });
 
+        Calendar today = Calendar.getInstance();
 
+        datePicker.init(
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH),
+                new DatePicker.OnDateChangedListener() {
+
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if (checked==0){
+                            date = NewRecord.getSringFormatForDate(datePicker.getYear(),datePicker.getMonth()+1,datePicker.getDayOfMonth());
+                            Log.d("Date: ",date);
+                        }
+                        else if (checked==1) {
+                            date = NewRecord.getSringFormatForDate(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()).substring(0, 7);
+                            Log.d("Date: ", date);
+                        }
+                    }
+                });
         return view;
     }
 
