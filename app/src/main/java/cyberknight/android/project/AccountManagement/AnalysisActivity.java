@@ -7,13 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import cyberknight.android.project.HomeScreen.RecordScreenUpdater;
 import cyberknight.android.project.R;
 
-public class AnalysisActivity extends AppCompatActivity {
+public class AnalysisActivity extends AppCompatActivity implements RecordScreenUpdater {
 
     private DrawerAnalysisFragment drawerAnalysisFragment;
     private PieChartFragment chartReport;
-    private Button report;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,34 +27,32 @@ public class AnalysisActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.analysis_fragment,drawerAnalysisFragment).commit();
 
-        report = (Button) findViewById(R.id.generateReport);
-        Log.d("Out","onCreate");
+        date = drawerAnalysisFragment.getDate();
+    }
 
-        report.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void updateScreenRecords() {
+        if(date.length()==10){
 
-                Log.d("In","onClick");
-                String date = drawerAnalysisFragment.getDate();
-                if(date.length()==10){
+            chartReport.setCurrent(date);
+            chartReport.setReportOf("Date");
+            Log.d("Date: ",date);
+            FragmentManager fragmentManager = getSupportFragmentManager() ;
+            fragmentManager.beginTransaction().replace(R.id.analysis_fragment,chartReport).commit();
+        }
+        else{
 
-                    chartReport.setCurrent(date);
-                    chartReport.setReportOf("Date");
-                    Log.d("Date: ",date);
-                    FragmentManager fragmentManager = getSupportFragmentManager() ;
-                    fragmentManager.beginTransaction().replace(R.id.analysis_fragment,chartReport).commit();
-                }
-                else{
+            chartReport.setCurrent(date);
+            chartReport.setReportOf("Month");
+            Log.d("Date: ",date);
+            FragmentManager fragmentManager = getSupportFragmentManager() ;
+            fragmentManager.beginTransaction().replace(R.id.analysis_fragment,chartReport).commit();
 
-                    chartReport.setCurrent(date);
-                    chartReport.setReportOf("Month");
-                    Log.d("Date: ",date);
-                    FragmentManager fragmentManager = getSupportFragmentManager() ;
-                    fragmentManager.beginTransaction().replace(R.id.analysis_fragment,chartReport).commit();
+        }
+    }
 
-                }
-                report.setVisibility(View.GONE);
-            }
-        });
+    @Override
+    public void setDateTo(String date) {
+        this.date = date;
     }
 }

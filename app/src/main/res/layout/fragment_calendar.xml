@@ -15,8 +15,9 @@
         android:textSize="@dimen/large_text"
         android:textColor="@color/white"
         android:background="@color/accent"/>
+
     <CalendarView
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="300dp"
         android:id="@+id/calendar"
         android:layout_gravity="center_horizontal"

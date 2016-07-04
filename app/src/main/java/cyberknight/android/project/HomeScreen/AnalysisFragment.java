@@ -127,7 +127,7 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener,R
         // creating labels
 
         Legend l=pieChart.getLegend();
-        l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        l.setPosition(Legend.LegendPosition.ABOVE_CHART_RIGHT);
         l.setXEntrySpace(12f);
         l.setYEntrySpace(12f);
         l.setYOffset(0f);

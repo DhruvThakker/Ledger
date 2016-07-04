@@ -1,5 +1,6 @@
 package cyberknight.android.project.AccountManagement;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.RadioGroup;
 import java.util.Calendar;
 
 import cyberknight.android.project.HomeScreen.NewRecord;
+import cyberknight.android.project.HomeScreen.RecordScreenUpdater;
 import cyberknight.android.project.R;
 
 /**
@@ -27,9 +29,16 @@ public class DrawerAnalysisFragment extends Fragment {
     private DatePicker datePicker;
     private String date;
     private Button report;
+    private Activity parentActivity;
 
     public String getDate() {
         return date;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.parentActivity = activity;
     }
 
     static DrawerAnalysisFragment newInstance(int num) {
@@ -58,12 +67,14 @@ public class DrawerAnalysisFragment extends Fragment {
         optionDate.setChecked(true);
         date = NewRecord.getSringFormatForDate(datePicker.getYear(),datePicker.getMonth()+1,datePicker.getDayOfMonth());
 
-        datePicker.setOnClickListener(new View.OnClickListener() {
+        report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((RecordScreenUpdater)parentActivity).setDateTo(date);
+                ((RecordScreenUpdater)parentActivity).updateScreenRecords();
             }
         });
+
         checked = 0;
 
         radioOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

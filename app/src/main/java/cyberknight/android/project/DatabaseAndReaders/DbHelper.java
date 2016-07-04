@@ -311,4 +311,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME, KEY_ID + "=" + id, null) > 0;
     }
 
+    public void deleteAllRecords(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NAME);
+        db.execSQL("delete from "+ ACCOUNTS_TABLE);
+
+    }
 }

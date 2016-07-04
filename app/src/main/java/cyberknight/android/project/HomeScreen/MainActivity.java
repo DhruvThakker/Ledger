@@ -1,28 +1,33 @@
 package cyberknight.android.project.HomeScreen;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnMenuTabSelectedListener;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cyberknight.android.project.AccountManagement.AboutUsActivity;
 import cyberknight.android.project.AccountManagement.AnalysisActivity;
+import cyberknight.android.project.AccountManagement.SettingsActivity;
 import cyberknight.android.project.DatabaseAndReaders.DbHelper;
 import cyberknight.android.project.AccountManagement.AccountActivity;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
@@ -31,7 +36,7 @@ import cyberknight.android.project.R;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater{
 
     public static Context applicationContext;
-    private LinearLayout drawerPane, navButtons[] = new LinearLayout[6];
+    private LinearLayout drawerPane, navButtons[] = new LinearLayout[6], bottomBarHome, bottomBarSummary, bottomBarAnalysis;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -54,6 +59,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navButtons[4] = (LinearLayout) findViewById(R.id.navSettings);
         navButtons[5] = (LinearLayout) findViewById(R.id.navAboutUs);
 
+        bottomBarHome = (LinearLayout) findViewById(R.id.bottom_bar_home);
+        bottomBarSummary = (LinearLayout) findViewById(R.id.bottom_bar_summary);
+        bottomBarAnalysis = (LinearLayout) findViewById(R.id.bottom_bar_analysis);
+
+        if(getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("firstCheck",false) && getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("passwordSet",false)) {
+            View promptsView = LayoutInflater.from(this).inflate(R.layout.dialog_password, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setView(promptsView);
+            final EditText userInput = (EditText) promptsView.findViewById(R.id.editPassword);
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    SharedPreferences sharedPreferences = getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE);
+                                    if(sharedPreferences.getString("password","").equals(userInput.getText().toString())){
+                                        dialog.dismiss();
+                                        getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).edit().putBoolean("firstCheck",false).commit();
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_SHORT).show();
+                                        userInput.setText("");
+                                        finish();
+                                    }
+                                }
+                            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.setCancelable(false);
+            alertDialog.show();
+        }
         applicationContext = getApplicationContext();
         DbHelper database = new DbHelper(getApplicationContext());
 
@@ -71,40 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         home = new HomeFragment();
-        BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
-        bottomBar.setItemsFromMenu(R.menu.navigation_bottom_button, new OnMenuTabSelectedListener() {
-            @Override
-            public void onMenuItemSelected(int itemId) {
-                switch (itemId) {
-                    case R.id.home_item:
-                        Log.d("daa","home");
-                        home.setDateTo(currentDate);
-                        currentLoadedFragment = home;
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
-                        break;
-                    case R.id.summary_item:
-                        Log.d("daa","summary");
-                        SummaryFragment summaryFragment = new SummaryFragment();
-                        summaryFragment.setDateTo(currentDate);
-                        currentLoadedFragment = summaryFragment;
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, summaryFragment).commit();
-                        break;
-                    case R.id.analysis_item:
-                        AnalysisFragment analysisFragment = new AnalysisFragment();
-                        analysisFragment.setDateTo(currentDate);
-                        currentLoadedFragment = analysisFragment;
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_frame, analysisFragment).commit();
-                        break;
-                }
-            }
-        });
-
-        // Set the color for the active tab. Ignored on mobile when there are more than three tabs.
-        //bottomBar.setBackgroundColor(getResources().getColor(R.color.primary));
-        bottomBar.setActiveTabColor(getResources().getColor(R.color.primary_dark));
 
         home.setDateTo(currentDate);
         currentLoadedFragment = home;
@@ -126,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        bottomBarHome.setOnClickListener(this);
+        bottomBarSummary.setOnClickListener(this);
+        bottomBarAnalysis.setOnClickListener(this);
 
         drawerPane.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +170,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             calendarFragment.show(fragmentManager,"Calendar Fragment");
 
             return true;
+        }else if (id == R.id.action_aboutUs) {
+            startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
+            return true;
+        }
+        else if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
         }
 
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -177,11 +190,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         switch(v.getId()){
+            case R.id.bottom_bar_home:
+                bottomBarHome.setAlpha(1f);
+                bottomBarSummary.setAlpha(0.5f);
+                bottomBarAnalysis.setAlpha(0.5f);
+                home.setDateTo(currentDate);
+                currentLoadedFragment = home;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
+                break;
+            case R.id.bottom_bar_summary:
+                bottomBarHome.setAlpha(0.5f);
+                bottomBarSummary.setAlpha(1f);
+                bottomBarAnalysis.setAlpha(0.5f);
+                SummaryFragment summaryFragment = new SummaryFragment();
+                summaryFragment.setDateTo(currentDate);
+                currentLoadedFragment = summaryFragment;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, summaryFragment).commit();
+                break;
+            case R.id.bottom_bar_analysis:
+                bottomBarHome.setAlpha(0.5f);
+                bottomBarSummary.setAlpha(0.5f);
+                bottomBarAnalysis.setAlpha(1f);
+                AnalysisFragment analysisFragment = new AnalysisFragment();
+                analysisFragment.setDateTo(currentDate);
+                currentLoadedFragment = analysisFragment;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, analysisFragment).commit();
+                break;
             case R.id.navHome:
                 home.setDateTo(currentDate);
                 currentLoadedFragment = home;
-                FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, home).commit();
                 setTitle("Home");
                 break;
@@ -200,10 +239,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             case R.id.navSettings:
-                setTitle("Settings");
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
             case R.id.navAboutUs:
-                setTitle("About Us");
+                startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
                 break;
             default:
         }
@@ -218,5 +257,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void setDateTo(String date) {
         currentDate = date;
+    }
+
+    @Override
+    public void finish() {
+        getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).edit().putBoolean("firstCheck",true).commit();
+        super.finish();
     }
 }

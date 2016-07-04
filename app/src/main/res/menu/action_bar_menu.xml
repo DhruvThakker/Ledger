@@ -5,7 +5,17 @@
     tools:context=".MainActivity">
 
     <item android:id="@+id/action_calendar"
-        android:title="calendar"
+        android:title="Calendar"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_settings"
+        android:title="Settings"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_aboutUs"
+        android:title="About Us"
         android:orderInCategory="100"
         app:showAsAction="never"/>
 
