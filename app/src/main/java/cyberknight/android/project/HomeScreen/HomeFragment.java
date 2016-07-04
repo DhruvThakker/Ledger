@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,7 +57,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         records = (ListView) view.findViewById(R.id.recordList);
         database = new DbHelper(MainActivity.applicationContext);
 
-
         Log.d("current Date","------------------"+currentDate);
         allRecords = database.getAllAccountDetailsByDate(currentDate);
         if(!(allRecords.size()==0)) allRecords.add(allRecords.size(),new RecordDetails());
@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
                 }
             }
         });
+
         return view;
     }
 

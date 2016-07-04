@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import cyberknight.android.project.R;
 
-public class AccountActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity implements ReloadFragment{
 
     String fragment;
     @Override
@@ -40,5 +40,12 @@ public class AccountActivity extends AppCompatActivity {
                 Toast.makeText(this,"Error occured",Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void reloadFragment() {
+        Fragment fragment = new AccountFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
     }
 }

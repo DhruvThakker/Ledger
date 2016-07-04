@@ -42,8 +42,8 @@ public class BudgetFragment extends Fragment {
         okbutton = (ImageButton) view.findViewById(R.id.budone);
 
         budget = MainActivity.applicationContext.getSharedPreferences(BUDGET_PREFRENCES_FILE, Context.MODE_PRIVATE);
-        double budgetMonthly = budget.getFloat("budget",0.00f);
-        edittextmonthly.setText(String.valueOf(budgetMonthly));
+        double budgetMonthly = budget.getFloat("budget",0);
+        if(budgetMonthly!=0)    edittextmonthly.setText(String.valueOf(budgetMonthly));
         textweekly.setText(Math.round(budgetMonthly * 100d / 4)/100d+ "");
         textdaily.setText(Math.round(budgetMonthly * 100d / 30)/100d + "");
         textyearly.setText(Math.round(budgetMonthly * 100d / 4)/100d + "");

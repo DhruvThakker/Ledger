@@ -16,13 +16,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import cyberknight.android.project.AccountManagement.AboutUsActivity;
@@ -33,7 +37,7 @@ import cyberknight.android.project.AccountManagement.AccountActivity;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
 import cyberknight.android.project.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater, SimpleGestureFilter.SimpleGestureListener{
 
     public static Context applicationContext;
     private LinearLayout drawerPane, navButtons[] = new LinearLayout[6], bottomBarHome, bottomBarSummary, bottomBarAnalysis;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HomeFragment home;
     private String currentDate;
     private Fragment currentLoadedFragment;
+    private SimpleGestureFilter detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomBarHome = (LinearLayout) findViewById(R.id.bottom_bar_home);
         bottomBarSummary = (LinearLayout) findViewById(R.id.bottom_bar_summary);
         bottomBarAnalysis = (LinearLayout) findViewById(R.id.bottom_bar_analysis);
+        FrameLayout contentFrame = (FrameLayout) findViewById(R.id.content_frame);
 
         if(getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("firstCheck",false) && getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("passwordSet",false)) {
             View promptsView = LayoutInflater.from(this).inflate(R.layout.dialog_password, null);
@@ -105,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("MainActivity","Records Not Added");
         }
 
+        detector = new SimpleGestureFilter(MainActivity.this, this);
+        detector.setSwipeMaxDistance(500);
+        detector.setSwipeMinVelocity(0);
         currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         home = new HomeFragment();
 
@@ -188,6 +197,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerToggle.syncState();
     }
 
+    public String changeDate(String date, int numToAdd){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.add(Calendar.DATE, numToAdd);
+        date = sdf.format(c.getTime());
+        return date;
+    }
+
     @Override
     public void onClick(View v) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -263,5 +285,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void finish() {
         getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).edit().putBoolean("firstCheck",true).commit();
         super.finish();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent me) {
+        // Call onTouchEvent of SimpleGestureFilter class
+        this.detector.onTouchEvent(me);
+        return super.dispatchTouchEvent(me);
+    }
+
+    @Override
+    public void onSwipe(int direction) {
+        Log.d("HomeFragment","\n\n\n\n\n-1");
+        switch (direction) {
+
+            case SimpleGestureFilter.SWIPE_RIGHT:
+                currentDate = changeDate(currentDate,-1);
+                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
+                Log.d("HomeFragment","\n\n\n\n\n-1");
+                break;
+            case SimpleGestureFilter.SWIPE_LEFT:
+                currentDate = changeDate(currentDate,1);
+                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
+                Log.d("HomeFragment","\n\n\n\n\n-1");
+                break;
+        }
+    }
+
+    @Override
+    public void onDoubleTap() {
+
     }
 }

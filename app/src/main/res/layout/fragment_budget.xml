@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="end"
+                android:hint="0.0"
                 android:inputType="numberDecimal"
                 android:id="@+id/edit_monthlybudget"/>
 
