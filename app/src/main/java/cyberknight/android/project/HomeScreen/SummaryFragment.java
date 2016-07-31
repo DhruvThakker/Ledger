@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -26,12 +29,12 @@ import cyberknight.android.project.R;
  * Created by Parth on 30-06-2016.
  * CyberKnight apps
  */
-public class SummaryFragment extends Fragment implements View.OnClickListener,RecordScreenUpdater{
+public class SummaryFragment extends Fragment implements RecordScreenUpdater{
 
     private DbHelper database;
     private ArrayList<RecordDetails> allRecords;
-    private String date;
-    private TextView pageDate, budget, expenseB, income, expenseC, balance1, balance2;
+    private String currentDate;
+    private TextView budget, expenseB, income, expenseC, balance1, balance2;
     private LinearLayout bal1, bal2;
     private Activity parentActivity;
 
@@ -46,7 +49,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener,Re
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
-        pageDate = (TextView) view.findViewById(R.id.summary_pageDate);
         budget = (TextView) view.findViewById(R.id.summary_budget);
         expenseB = (TextView) view.findViewById(R.id.summary_expense_b);
         income = (TextView) view.findViewById(R.id.summary_income);
@@ -55,14 +57,57 @@ public class SummaryFragment extends Fragment implements View.OnClickListener,Re
         balance2 = (TextView) view.findViewById(R.id.summary_balance_2);
         bal1 = (LinearLayout) view.findViewById(R.id.summary_balance_b);
         bal2 = (LinearLayout) view.findViewById(R.id.summary_balance_c);
-
-        ImageView prev = (ImageView) view.findViewById(R.id.summary_previousDate);
-        ImageView next = (ImageView) view.findViewById(R.id.summary_nextDate);
-
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
+        ScrollView scroll = (ScrollView) view.findViewById(R.id.scrollView);
 
         updateScreenRecords();
+
+        final GestureDetector gesture = new GestureDetector(getActivity(),
+                new GestureDetector.SimpleOnGestureListener() {
+
+                    @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                                           float velocityY) {
+                        Log.d("HOME FRAGMENT GESTURES", "onFling has been called!");
+                        final int SWIPE_MIN_DISTANCE = 10;
+                        final int SWIPE_MAX_OFF_PATH = 250;
+                        final int SWIPE_THRESHOLD_VELOCITY = 0;
+                        try {
+                            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                                return false;
+                            if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                currentDate = changeDate(currentDate, 1);
+                                ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
+                                updateScreenRecords();
+                            } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                currentDate = changeDate(currentDate, -1);
+                                ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
+                                updateScreenRecords();
+                            }
+                        } catch (Exception e) {
+                            // nothing
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
+            }
+        });
+
+        scroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
+            }
+        });
 
         return view;
     }
@@ -72,9 +117,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener,Re
         SharedPreferences sharedPreferences = MainActivity.applicationContext.getSharedPreferences(BudgetFragment.BUDGET_PREFRENCES_FILE, Context.MODE_PRIVATE);
         budget.setText(String.valueOf((double)Math.round((sharedPreferences.getFloat("budget",0f)/30)*100d)/100d));
 
-        pageDate.setText(date);
         database = new DbHelper(MainActivity.applicationContext);
-        allRecords = database.getAllAccountDetailsByDate(date);
+        allRecords = database.getAllAccountDetailsByDate(currentDate);
         double totalExpense = 0;
         double totalIncome = 0;
         for(int i=0; i<allRecords.size(); i++){
@@ -103,17 +147,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener,Re
     }
 
     @Override
-    public void setDateTo(String date) {
-        this.date = date;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.summary_previousDate)    date = changeDate(date,-1);
-        else    date = changeDate(date,1);
-        ((RecordScreenUpdater)parentActivity).setDateTo(date);
-        pageDate.setText(date);
-        updateScreenRecords();
+    public void setDateTo(String currentDate) {
+        this.currentDate = currentDate;
     }
 
     public String changeDate(String date, int numToAdd){

@@ -10,13 +10,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".HomeScreen.MainActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".AccountManagement.AccountActivity"
             android:parentActivityName=".HomeScreen.MainActivity"
@@ -52,6 +46,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeScreen.MainActivity" />
         </activity>
+        <activity
+            android:name=".StartUpScreens.Splash"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".StartUpScreens.Password"
+            android:label="Enter Password"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StartUpScreens.IntroActivity"></activity>
     </application>
 
 </manifest>

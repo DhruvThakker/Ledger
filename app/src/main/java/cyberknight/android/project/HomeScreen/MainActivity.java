@@ -16,11 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -37,7 +38,7 @@ import cyberknight.android.project.AccountManagement.AccountActivity;
 import cyberknight.android.project.DatabaseAndReaders.JsonReader;
 import cyberknight.android.project.R;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater, SimpleGestureFilter.SimpleGestureListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RecordScreenUpdater{
 
     public static Context applicationContext;
     private LinearLayout drawerPane, navButtons[] = new LinearLayout[6], bottomBarHome, bottomBarSummary, bottomBarAnalysis;
@@ -45,9 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mDrawerLayout;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private HomeFragment home;
+    private SummaryFragment summary;
+    private AnalysisFragment analysis;
+    private TextView pageDate;
     private String currentDate;
     private Fragment currentLoadedFragment;
-    private SimpleGestureFilter detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.navDrawer);
         drawerPane = (LinearLayout) findViewById(R.id.drawerPane);
+        pageDate = (TextView) findViewById(R.id.pageDate);
 
         navButtons[0] = (LinearLayout) findViewById(R.id.navHome);
         navButtons[1] = (LinearLayout) findViewById(R.id.navAccoout);
@@ -64,38 +68,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navButtons[4] = (LinearLayout) findViewById(R.id.navSettings);
         navButtons[5] = (LinearLayout) findViewById(R.id.navAboutUs);
 
+        ImageView prevDate = (ImageView) findViewById(R.id.previousDate);
+        ImageView nextDate = (ImageView) findViewById(R.id.nextDate);
+
         bottomBarHome = (LinearLayout) findViewById(R.id.bottom_bar_home);
         bottomBarSummary = (LinearLayout) findViewById(R.id.bottom_bar_summary);
         bottomBarAnalysis = (LinearLayout) findViewById(R.id.bottom_bar_analysis);
-        FrameLayout contentFrame = (FrameLayout) findViewById(R.id.content_frame);
 
-        if(getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("firstCheck",false) && getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).getBoolean("passwordSet",false)) {
-            View promptsView = LayoutInflater.from(this).inflate(R.layout.dialog_password, null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setView(promptsView);
-            final EditText userInput = (EditText) promptsView.findViewById(R.id.editPassword);
-            alertDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    SharedPreferences sharedPreferences = getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE);
-                                    if(sharedPreferences.getString("password","").equals(userInput.getText().toString())){
-                                        dialog.dismiss();
-                                        getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).edit().putBoolean("firstCheck",false).commit();
-                                    }
-                                    else{
-                                        Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_SHORT).show();
-                                        userInput.setText("");
-                                        finish();
-                                    }
-                                }
-                            });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.setCancelable(false);
-            alertDialog.show();
-        }
         applicationContext = getApplicationContext();
         DbHelper database = new DbHelper(getApplicationContext());
 
@@ -111,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("MainActivity","Records Not Added");
         }
 
-        detector = new SimpleGestureFilter(MainActivity.this, this);
-        detector.setSwipeMaxDistance(500);
-        detector.setSwipeMinVelocity(0);
         currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        pageDate.setText(currentDate);
         home = new HomeFragment();
+        summary = new SummaryFragment();
+        analysis = new AnalysisFragment();
 
         home.setDateTo(currentDate);
         currentLoadedFragment = home;
@@ -141,13 +120,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomBarHome.setOnClickListener(this);
         bottomBarSummary.setOnClickListener(this);
         bottomBarAnalysis.setOnClickListener(this);
+        prevDate.setOnClickListener(this);
+        nextDate.setOnClickListener(this);
+        pageDate.setOnClickListener(this);
 
-        drawerPane.setOnClickListener(new View.OnClickListener() {
+        /*drawerPane.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
         try {
             getSupportActionBar().setElevation(2);
@@ -226,19 +208,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bottomBarHome.setAlpha(0.5f);
                 bottomBarSummary.setAlpha(1f);
                 bottomBarAnalysis.setAlpha(0.5f);
-                SummaryFragment summaryFragment = new SummaryFragment();
-                summaryFragment.setDateTo(currentDate);
-                currentLoadedFragment = summaryFragment;
-                fragmentManager.beginTransaction().replace(R.id.content_frame, summaryFragment).commit();
+                summary.setDateTo(currentDate);
+                currentLoadedFragment = summary;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, summary).commit();
                 break;
             case R.id.bottom_bar_analysis:
                 bottomBarHome.setAlpha(0.5f);
                 bottomBarSummary.setAlpha(0.5f);
                 bottomBarAnalysis.setAlpha(1f);
-                AnalysisFragment analysisFragment = new AnalysisFragment();
-                analysisFragment.setDateTo(currentDate);
-                currentLoadedFragment = analysisFragment;
-                fragmentManager.beginTransaction().replace(R.id.content_frame, analysisFragment).commit();
+                analysis.setDateTo(currentDate);
+                currentLoadedFragment = analysis;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, analysis).commit();
                 break;
             case R.id.navHome:
                 home.setDateTo(currentDate);
@@ -266,6 +246,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.navAboutUs:
                 startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
                 break;
+            case R.id.pageDate:
+                currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                pageDate.setText(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
+                break;
+            case R.id.nextDate:
+                currentDate = changeDate(currentDate, 1);
+                pageDate.setText(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
+                break;
+            case R.id.previousDate:
+                currentDate = changeDate(currentDate, -1);
+                pageDate.setText(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
+                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
+                break;
             default:
         }
         mDrawerLayout.closeDrawers();
@@ -273,12 +271,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void updateScreenRecords() {
-
     }
 
     @Override
     public void setDateTo(String date) {
         currentDate = date;
+        pageDate.setText(currentDate);
     }
 
     @Override
@@ -288,34 +286,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent me) {
-        // Call onTouchEvent of SimpleGestureFilter class
-        this.detector.onTouchEvent(me);
-        return super.dispatchTouchEvent(me);
-    }
-
-    @Override
-    public void onSwipe(int direction) {
-        Log.d("HomeFragment","\n\n\n\n\n-1");
-        switch (direction) {
-
-            case SimpleGestureFilter.SWIPE_RIGHT:
-                currentDate = changeDate(currentDate,-1);
-                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
-                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
-                Log.d("HomeFragment","\n\n\n\n\n-1");
-                break;
-            case SimpleGestureFilter.SWIPE_LEFT:
-                currentDate = changeDate(currentDate,1);
-                ((RecordScreenUpdater)currentLoadedFragment).setDateTo(currentDate);
-                ((RecordScreenUpdater)currentLoadedFragment).updateScreenRecords();
-                Log.d("HomeFragment","\n\n\n\n\n-1");
-                break;
-        }
-    }
-
-    @Override
-    public void onDoubleTap() {
-
+    public void onDestroy() {
+        getSharedPreferences(SettingsActivity.SETTINGS_FILE,Context.MODE_PRIVATE).edit().putBoolean("firstCheck",true).commit();
+        super.onDestroy();
     }
 }

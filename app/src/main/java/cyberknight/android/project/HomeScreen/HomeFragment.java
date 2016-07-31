@@ -3,10 +3,12 @@ package cyberknight.android.project.HomeScreen;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,13 +32,12 @@ import cyberknight.android.project.R;
  * Created by Parth on 29-06-2016.
  * CyberKnight apps
  */
-public class HomeFragment extends Fragment implements RecordScreenUpdater, View.OnClickListener{
+public class HomeFragment extends Fragment implements RecordScreenUpdater{
 
     private ListView records;
     private DbHelper database;
     private ArrayList<RecordDetails> allRecords;
     private String currentDate;
-    private TextView pageDate;
     private Activity parentActivity;
 
     @Override
@@ -50,9 +51,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        pageDate = (TextView) view.findViewById(R.id.pageDate);
-        ImageView prev = (ImageView) view.findViewById(R.id.previousDate);
-        ImageView next = (ImageView) view.findViewById(R.id.nextDate);
 
         records = (ListView) view.findViewById(R.id.recordList);
         database = new DbHelper(MainActivity.applicationContext);
@@ -65,8 +63,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
 
-        pageDate.setText(currentDate);
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabNewRecord);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,22 +71,75 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
             }
         });
 
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
+        final GestureDetector gesture = new GestureDetector(getActivity(),
+                new GestureDetector.SimpleOnGestureListener() {
 
-        records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                                           float velocityY) {
+                        Log.d("HOME FRAGMENT GESTURES", "onFling has been called!");
+                        final int SWIPE_MIN_DISTANCE = 10;
+                        final int SWIPE_MAX_OFF_PATH = 250;
+                        final int SWIPE_THRESHOLD_VELOCITY = 0;
+                        try {
+                            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                                return false;
+                            if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                currentDate = changeDate(currentDate, 1);
+                                ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
+                                updateScreenRecords();
+                            } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                currentDate = changeDate(currentDate, -1);
+                                ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
+                                updateScreenRecords();
+                            }
+                        } catch (Exception e) {
+                            // nothing
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        records.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                if(position!=allRecords.size()-1) {
+                                    DialogFragment showRecord = RecordDialogFragment.newInstance(0);
+                                    Bundle temp = new Bundle();
+                                    temp.putInt("position", position);
+                                    temp.putString("date", currentDate);
+                                    showRecord.setTargetFragment(getThisFragment(),0);
+                                    showRecord.setArguments(temp);
+                                    showRecord.setCancelable(false);
+                                    showRecord.show(getFragmentManager(), "RecordFromHome");
+                                }
+                            }
+                        });
+                        return super.onSingleTapUp(e);
+                    }
+                });
+
+        view.bringToFront();
+        view.invalidate();
+        view.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position!=allRecords.size()-1) {
-                    DialogFragment showRecord = RecordDialogFragment.newInstance(0);
-                    Bundle temp = new Bundle();
-                    temp.putInt("position", position);
-                    temp.putString("date", currentDate);
-                    showRecord.setTargetFragment(getThisFragment(),0);
-                    showRecord.setArguments(temp);
-                    showRecord.setCancelable(false);
-                    showRecord.show(getFragmentManager(), "RecordFromHome");
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
+            }
+        });
+
+
+
+        records.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
             }
         });
 
@@ -116,7 +165,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         else allRecords.add(new RecordDetails("","No Entries today..","","",-1,""));
         RecordAdapter adapter = new RecordAdapter(getContext(),allRecords);
         records.setAdapter(adapter);
-        pageDate.setText(currentDate);
     }
 
     @Override
@@ -124,7 +172,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         currentDate = date;
     }
 
-    public String getCurrentDate(){ return this.currentDate; }
     public Fragment getThisFragment(){ return this; }
 
     public String changeDate(String date, int numToAdd){
@@ -138,15 +185,6 @@ public class HomeFragment extends Fragment implements RecordScreenUpdater, View.
         c.add(Calendar.DATE, numToAdd);
         date = sdf.format(c.getTime());
         return date;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.previousDate)    currentDate = changeDate(currentDate,-1);
-        else    currentDate = changeDate(currentDate,1);
-        ((RecordScreenUpdater)parentActivity).setDateTo(currentDate);
-        pageDate.setText(currentDate);
-        updateScreenRecords();
     }
 
     class RecordAdapter extends BaseAdapter {

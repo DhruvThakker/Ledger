@@ -32,26 +32,18 @@ import cyberknight.android.project.R;
  * Created by Parth on 02-07-2016.
  * CyberKnight apps
  */
-public class AnalysisFragment extends Fragment implements View.OnClickListener,RecordScreenUpdater{
+public class AnalysisFragment extends Fragment implements RecordScreenUpdater{
 
     private ArrayList<String> categories = new ArrayList<>();
     private JsonReader jsonReader = new JsonReader(MainActivity.applicationContext);
     private View view;
     private PieChart pieChart;
     private ArrayList<RecordDetails> foodRecords=new ArrayList<>();
-    private TextView pageDate;
     private double income = 0;
     private double expense = 0;
-    private Activity parentActivity;
 
     DbHelper dbHelper;
     private String date;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        parentActivity = activity;
-    }
 
     public AnalysisFragment() {
     }
@@ -61,13 +53,7 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener,R
         view = inflater.inflate(R.layout.fragment_analysis, container, false);
 
         categories = jsonReader.getExpenseCategories();
-        pageDate = (TextView) view.findViewById(R.id.analysis_pageDate);
         pieChart = (PieChart) view.findViewById(R.id.chart);
-        ImageView prev = (ImageView) view.findViewById(R.id.analysis_previousDate);
-        ImageView next = (ImageView) view.findViewById(R.id.analysis_nextDate);
-
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
 
         updateScreenRecords();
 
@@ -97,7 +83,6 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener,R
         ArrayList<Entry> entries = new ArrayList<>();
 
         pieChart = (PieChart) view.findViewById(R.id.chart);
-        pageDate.setText(date);
         dbHelper = new DbHelper(MainActivity.applicationContext);
         categories = jsonReader.getExpenseCategories();
         foodRecords = dbHelper.getAllAccountDetailsByDate(date);
@@ -147,27 +132,5 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener,R
     @Override
     public void setDateTo(String date) {
         this.date = date;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.analysis_previousDate)    date = changeDate(date,-1);
-        else    date = changeDate(date,1);
-        ((RecordScreenUpdater)parentActivity).setDateTo(date);
-        pageDate.setText(date);
-        updateScreenRecords();
-    }
-
-    public String changeDate(String date, int numToAdd){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar c = Calendar.getInstance();
-        try {
-            c.setTime(sdf.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        c.add(Calendar.DATE, numToAdd);
-        date = sdf.format(c.getTime());
-        return date;
     }
 }
